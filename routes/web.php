@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::any('/test', 'qyWechatController@test');
+Route::any('/test', 'Test\TestController@index');
 
 /*Route::any('/jianpiao', 'JianPiao\JianPiaoController@index');
 Route::get('/test','TestController@index');*/
