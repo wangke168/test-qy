@@ -78,7 +78,7 @@ class TestController extends Controller
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
                 $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-//                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
+                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
                 $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
                 $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
                 $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
