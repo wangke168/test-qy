@@ -31,65 +31,13 @@ class TestController extends Controller
 
     }
 
-    /*    public function config()
-        {
-            $config = [
-                'corp_id' => 'wwfb1970349326c73f',
-
-                'agent_id' => 1000004,
-                'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
-
-                // server config
-                'token' => 'jianpiao',
-                'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
-
-                //...
-            ];
-            return $config;
-        }*/
     public function index()
     {
-
         $this->weObj->server->push(function ($message) {
-            $openid=$message['FromUserName'];
+
             switch ($message['MsgType']) {
                 case 'text':
-
-                    /*     $text = new Text($message['FromUserName']);
-                         return $text;*/
-                    /*    $items = [
-                            new NewsItem([
-                                'title' => '查询结果',
-                                'description' => 'asdas',
-                                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-    //                'image'       => $image,
-                                // ...
-                            ]),
-
-                            // ...
-                        ];
-                        $news = new News($items);*/
-                    $config = [
-                        'corp_id' => 'wwfb1970349326c73f',
-
-                        'agent_id' => 1000004,
-                        'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
-
-                        // server config
-                        'token' => 'jianpiao',
-                        'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
-
-                        //...
-                    ];
-                    /*  $app = Factory::work($config);
-                          $text = new Text('Hello world!');
-                $result = $app->customer_service->message($text)->to('hd_wangke')->send();*/
-
-
-                    $news=$this->Check_tecket($message['Content'],$openid);
-
-
-
+                    $news=$this->Check_tecket($message['Content']);
                     return $news;
                     break;
                 default:
@@ -97,52 +45,15 @@ class TestController extends Controller
                     break;
             }
 
-
-
-            //            return $this->Check_tecket($message['Content']);
-//            $weObj->news($this->Check_tecket($c))->reply()
         });
 
         $response = $this->weObj->server->serve();
 
         return $response;
-
-//        $weObj->news($this->Check_tecket($c))->reply()
-
-        /*   if (!$ret) {
-               \Log::info($ret);
-           }*/
-        /*
-        $f = $weObj->getRev()->getRevFrom();	//获取发送者微信号
-        $t = $weObj->getRevType();				//获取发送的类型
-        $d = $weObj->getRevData();				//获取发送的data
-        if ($t=="text")
-        {
-            $c = $weObj->getRevContent();			//获取发送的内容
-            $weObj->news(Check_tecket($c))->reply();
-        }
-        */
-
-        /*     $f = $weObj->getRev()->getRevFrom();	//获取发送者微信号
-             $t = $weObj->getRevType();				//获取发送的类型
-             $d = $weObj->getRevData();				//获取发送的data
-             $c = $weObj->getRevContent();			//获取发送的内容
-             if ($t=="text")
-             {
-     //            $c = $weObj->getRevContent();			//获取发送的内容
-     //           $weObj->text("你好！来自星星的：")->reply();
-     //            $c = $weObj->getRevContent();			//获取发送的内容
-                 $weObj->news($this->Check_tecket($c))->reply();
-
-             }*/
-//logg("-----------------------------------------");
-//        $weObj->valid();
-
-
     }
 
 //检票口
-    private function Check_tecket($tel,$openId)
+    private function Check_tecket($tel)
     {
         $url = env('QY_WECHAT_JIANPIAO_URL', 'url');
         $url = $url . $tel;
@@ -167,14 +78,14 @@ class TestController extends Controller
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
                 $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
+//                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
                 $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
                 $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
                 $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
                 /* if ($data['ticketorder'][$j]['ticket'] == '三大点+梦幻谷' || $data['ticketorder'][$j]['ticket'] == '网络联票+梦幻谷') {
                      $str = $str . "\n注意：该票种需要身份证检票";
                  } else {*/
-                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] . "（在检票口出示此识别码可直接进入景区。）";
+                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
 //                }
                 $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
             }
