@@ -73,7 +73,8 @@ class TestController extends Controller
         //    $str=$str."姓名：".$name."   电话：".$tel."\n";
         if ($ticketcount <> 0) {
 //            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
-            $str = "您好，该客人的预订信息如下";
+//            $str = "您好，该客人的预订信息如下";
+            $str='';
             for ($j = 0; $j < $ticketcount; $j++) {
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
