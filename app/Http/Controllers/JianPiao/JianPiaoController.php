@@ -9,7 +9,7 @@ use EasyWeChat\Work;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
-class TestController extends Controller
+class JianPiaoController extends Controller
 {
     public $weObj;
     public $config;
