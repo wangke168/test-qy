@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Test;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use EasyWeChat\Factory;
@@ -33,6 +34,8 @@ class TestController extends Controller
 
     public function test()
     {
+        $today=Carbon::today();
+        return $today;
         $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=2018-07-01&enddate=2018-07-31";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -41,7 +44,18 @@ class TestController extends Controller
         $json = curl_exec($ch);
         $data = json_decode($json, true);
         $network=$data['resultList'][0]['section'];
-        return $network;
+        $today=Carbon::today();
+        $str=$today."数据如下\n";
+        $str=$str.$data['resultList'][0]['section']."\n";
+        $str="营收".$str.$data['resultList'][0]['turnover']."\n";
+        $str="人数".$str.$data['resultList'][0]['personTime']."\n\n";
+        $str=$str.$data['resultList'][1]['section']."\n";
+        $str="营收".$str.$data['resultList'][1]['turnover']."\n";
+        $str="人数".$str.$data['resultList'][1]['personTime']."\n\n";
+        $str=$str.$data['resultList'][2]['section']."\n";
+        $str="营收".$str.$data['resultList'][2]['turnover']."\n";
+        $str="人数".$str.$data['resultList'][2]['personTime']."\n\n";
+        return $str;
     }
 
 

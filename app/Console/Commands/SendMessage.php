@@ -45,5 +45,6 @@ class SendMessage extends Command
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
+
     }
 }
