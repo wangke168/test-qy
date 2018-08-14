@@ -43,8 +43,8 @@ class TestController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        $network=$data['resultList'][0]['section'];
-        $today=Carbon::today();
+   
+
         $str=$today."数据如下\n";
         $str=$str.$data['resultList'][0]['section']."\n";
         $str="营收".$str.$data['resultList'][0]['turnover']."\n";
