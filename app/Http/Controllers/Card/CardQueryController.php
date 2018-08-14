@@ -23,7 +23,7 @@ class CardQueryController extends Controller
 
             // server config
             'token' => 'CardQuery',
-            'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
+            'aes_key' => 'QUM5w3LOduQ1kXYfmEn3FbmAKyU9OJOfeEpX5A9Ylgw',
 
             //...
         ];
