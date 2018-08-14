@@ -83,7 +83,7 @@ class TestController extends Controller
         );
         $ssl = substr($url,0,8) == "https://" ? TRUE : FALSE;
         if ($ssl){
-            $opt[CURLOPT_SSL_VERIFYHOST] = 1;
+            $opt[CURLOPT_SSL_VERIFYHOST] = 2;
             $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
         }
         curl_setopt_array($ch,$opt);
