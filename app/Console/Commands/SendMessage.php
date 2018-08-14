@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use EasyWeChat\Factory;
+use EasyWeChat\Kernel\Messages\Text;
 class SendMessage extends Command
 {
     /**
