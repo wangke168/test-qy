@@ -62,6 +62,10 @@ class TestController extends Controller
 
     public function index()
     {
+        $accessToken = $this->weObj->access_token;
+        $token =$accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        return $token;
+
         $this->weObj->server->push(function ($message) {
 
             $today=Carbon::now()->toDateString();
