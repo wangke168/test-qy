@@ -32,7 +32,7 @@ class TestController extends Controller
 
     }
 
-    public function test()
+    public function message($content)
     {
         $today=Carbon::now()->toDateString();
 //        return $today;
@@ -66,7 +66,7 @@ class TestController extends Controller
 
             switch ($message['MsgType']) {
                 case 'text':
-                    $news=$this->Check_tecket($message['Content']);
+                    $news=$this->message($message['Content']);
                     return $news;
                     break;
                 default:
