@@ -22,14 +22,28 @@ class TestController extends Controller
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
 
             // server config
-            'token' => 'jianpiao',
-            'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
+            'token' => 'test',
+            'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
 
             //...
         ];
         $this->weObj=Factory::work($this->config);
 
     }
+
+    public function test()
+    {
+        $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=2018-07-01&enddate=2018-07-31";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        return $data;
+    }
+
+
 
     public function index()
     {

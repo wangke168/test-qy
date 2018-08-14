@@ -17,18 +17,12 @@ class JianPiaoController extends Controller
     {
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
-
             'agent_id' => 1000003,
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
-
-            // server config
             'token' => 'jianpiao',
             'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
-
-            //...
         ];
         $this->weObj=Factory::work($this->config);
-
     }
 
     public function index()
@@ -44,11 +38,8 @@ class JianPiaoController extends Controller
                     return '收到其它消息';
                     break;
             }
-
         });
-
         $response = $this->weObj->server->serve();
-
         return $response;
     }
 
@@ -92,31 +83,18 @@ class JianPiaoController extends Controller
         } else {
             $str = "该手机号下无门票订单";
         }
-        /*      $newsData = array(
-                  "0" => array(
-                      'Title' => '查询结果',
-                      'Description' => $str,
-                      'Url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482'
-                  )
-              );*/
+
 
         $items = [
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
                 'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-//                'image'       => $image,
-                // ...
             ]),
 
-            // ...
         ];
         $news = new News($items);
 
-
-
-//        $weObj = Factory::work($this->config());
-//       $this->weObj->customer_service->message($news)->to($openId)->send();
         return $str;
     }
 }

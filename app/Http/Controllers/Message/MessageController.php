@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Card;
+namespace App\Http\Controllers\Message;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 
-class CardQueryController extends Controller
+class MessageController extends Controller
 {
     public $weObj;
     public $config;
@@ -19,8 +19,8 @@ class CardQueryController extends Controller
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000004,
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
-            'token' => 'CardQuery',
-            'aes_key' => 'QUM5w3LOduQ1kXYfmEn3FbmAKyU9OJOfeEpX5A9Ylgw',
+            'token' => 'test',
+            'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
         ];
         $this->weObj=Factory::work($this->config);
     }
