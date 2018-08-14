@@ -10,13 +10,15 @@ use EasyWeChat\Work;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
+
 class TestController extends Controller
 {
     public $weObj;
     public $config;
+
     public function __construct()
     {
-        $this->config=[
+        $this->config = [
             'corp_id' => 'wwfb1970349326c73f',
 
             'agent_id' => 1000004,
@@ -28,15 +30,15 @@ class TestController extends Controller
 
             //...
         ];
-        $this->weObj=Factory::work($this->config);
+        $this->weObj = Factory::work($this->config);
 
     }
 
     public function message($content)
     {
-        $today=Carbon::now()->toDateString();
+        $today = Carbon::now()->toDateString();
 //        return $today;
-        $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=".$today."&enddate=".$today;
+        $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -45,32 +47,60 @@ class TestController extends Controller
         $data = json_decode($json, true);
 
 
-        $str=$today."数据如下\n";
-        $str=$str.$data['resultList'][0]['section']."\n";
-        $str=$str."营收:".round($data['resultList'][0]['turnover'],2)."元\n";
-        $str=$str."人次:".$data['resultList'][0]['personTime']."\n\n";
-        $str=$str.$data['resultList'][1]['section']."\n";
-        $str=$str."营收:".round($data['resultList'][1]['turnover'],2)."元\n";
-        $str=$str."人次:".$data['resultList'][1]['personTime']."\n\n";
-        $str=$str.$data['resultList'][2]['section']."\n";
-        $str=$str."营收:".round($data['resultList'][2]['turnover'],2)."元\n";
-        $str=$str."人次:".$data['resultList'][2]['personTime']."\n\n";
+        $str = $today . "数据如下\n";
+        $str = $str . $data['resultList'][0]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][1]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][2]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
         return $str;
     }
 
+    public function test()
+    {
+        $accessToken = $this->weObj->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        $msg='要发送的文字信息';
+        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
+        $data="{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $res = $this->curlPost($url,$data);
 
+    }
+
+    private function curlPost($url,$data=""){
+        $ch = curl_init();
+        $opt = array(
+            CURLOPT_URL     => $url,
+            CURLOPT_HEADER  => 0,
+            CURLOPT_POST    => 1,
+            CURLOPT_POSTFIELDS      => $data,
+            CURLOPT_RETURNTRANSFER  => 1,
+            CURLOPT_TIMEOUT         => 20
+        );
+        $ssl = substr($url,0,8) == "https://" ? TRUE : FALSE;
+        if ($ssl){
+            $opt[CURLOPT_SSL_VERIFYHOST] = 1;
+            $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
+        }
+        curl_setopt_array($ch,$opt);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
 
     public function index()
     {
-        $accessToken = $this->weObj->access_token;
-        $token =$accessToken->getToken(); // token 数组  token['access_token'] 字符串
-        return $token['access_token'];
+
 
         $this->weObj->server->push(function ($message) {
 
-            $today=Carbon::now()->toDateString();
+            $today = Carbon::now()->toDateString();
 //        return $today;
-            $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=".$today."&enddate=".$today;
+            $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -79,16 +109,16 @@ class TestController extends Controller
             $data = json_decode($json, true);
 
 
-            $str=$today."数据如下\n";
-            $str=$str.$data['resultList'][0]['section']."\n";
-            $str=$str."营收:".round($data['resultList'][0]['turnover'],2)."元\n";
-            $str=$str."人次:".$data['resultList'][0]['personTime']."\n\n";
-            $str=$str.$data['resultList'][1]['section']."\n";
-            $str=$str."营收:".round($data['resultList'][1]['turnover'],2)."元\n";
-            $str=$str."人次:".$data['resultList'][1]['personTime']."\n\n";
-            $str=$str.$data['resultList'][2]['section']."\n";
-            $str=$str."营收:".round($data['resultList'][2]['turnover'],2)."元\n";
-            $str=$str."人次:".$data['resultList'][2]['personTime']."\n\n";
+            $str = $today . "数据如下\n";
+            $str = $str . $data['resultList'][0]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
+            $str = $str . $data['resultList'][1]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
+            $str = $str . $data['resultList'][2]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
             return $str;
 
         });
@@ -131,7 +161,7 @@ class TestController extends Controller
                 /* if ($data['ticketorder'][$j]['ticket'] == '三大点+梦幻谷' || $data['ticketorder'][$j]['ticket'] == '网络联票+梦幻谷') {
                      $str = $str . "\n注意：该票种需要身份证检票";
                  } else {*/
-                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
+                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'];
 //                }
                 $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
             }
@@ -158,7 +188,6 @@ class TestController extends Controller
             // ...
         ];
         $news = new News($items);
-
 
 
 //        $weObj = Factory::work($this->config());
