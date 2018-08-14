@@ -34,7 +34,7 @@ class TestController extends Controller
 
     public function test()
     {
-        $today=Carbon::today();
+        $today=Carbon::now()->toDateString();
         return $today;
         $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=2018-07-01&enddate=2018-07-31";
         $ch = curl_init();
