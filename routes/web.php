@@ -20,5 +20,6 @@ Route::any('/test', 'Test\TestController@index');
 
 Route::any('/jianpiao', 'JianPiao\JianPiaoController@index');
 
+Route::any('/cardquery', 'Card\CardQueryController@index');
 
 Route::get('/temp','TestController@index');
