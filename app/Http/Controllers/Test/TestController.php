@@ -47,13 +47,13 @@ class TestController extends Controller
 
         $str=$today."数据如下\n";
         $str=$str.$data['resultList'][0]['section']."\n";
-        $str=$str."营收:".round($data['resultList'][0]['turnover'],2)."\n";
+        $str=$str."营收:".round($data['resultList'][0]['turnover'],2)."元\n";
         $str=$str."人次:".$data['resultList'][0]['personTime']."\n\n";
         $str=$str.$data['resultList'][1]['section']."\n";
-        $str=$str."营收:".$data['resultList'][1]['turnover']."\n";
+        $str=$str."营收:".round($data['resultList'][1]['turnover'],2)."元\n";
         $str=$str."人次:".$data['resultList'][1]['personTime']."\n\n";
         $str=$str.$data['resultList'][2]['section']."\n";
-        $str=$str."营收:".$data['resultList'][2]['turnover']."\n";
+        $str=$str."营收:".round($data['resultList'][2]['turnover'],2)."元\n";
         $str=$str."人次:".$data['resultList'][2]['personTime']."\n\n";
         return $str;
     }
