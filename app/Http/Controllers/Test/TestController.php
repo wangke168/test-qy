@@ -40,7 +40,8 @@ class TestController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        return $data;
+        $network=$data['resultList'][0]['section'];
+        return $network;
     }
 
 
