@@ -43,18 +43,18 @@ class TestController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-   
+
 
         $str=$today."数据如下\n";
         $str=$str.$data['resultList'][0]['section']."\n";
-        $str="营收".$str.$data['resultList'][0]['turnover']."\n";
-        $str="人数".$str.$data['resultList'][0]['personTime']."\n\n";
+        $str=$str."营收:".$data['resultList'][0]['turnover']."\n";
+        $str=$str."人数:".$data['resultList'][0]['personTime']."\n\n";
         $str=$str.$data['resultList'][1]['section']."\n";
-        $str="营收".$str.$data['resultList'][1]['turnover']."\n";
-        $str="人数".$str.$data['resultList'][1]['personTime']."\n\n";
+        $str=$str."营收:".$data['resultList'][1]['turnover']."\n";
+        $str=$str."人数:".$data['resultList'][1]['personTime']."\n\n";
         $str=$str.$data['resultList'][2]['section']."\n";
-        $str="营收".$str.$data['resultList'][2]['turnover']."\n";
-        $str="人数".$str.$data['resultList'][2]['personTime']."\n\n";
+        $str=$str."营收:".$data['resultList'][2]['turnover']."\n";
+        $str=$str."人数:".$data['resultList'][2]['personTime']."\n\n";
         return $str;
     }
 
