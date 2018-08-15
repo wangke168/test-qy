@@ -18,7 +18,7 @@ class JianPiaoController extends Controller
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000003,
-            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
+            'secret' => 'Fh7r_eihHhtjjmgKh9k7HuVlGBj-sSNV0AU5Pu8Y0ng',
             'token' => 'jianpiao',
             'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
         ];

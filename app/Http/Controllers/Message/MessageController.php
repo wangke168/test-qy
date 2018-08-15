@@ -19,7 +19,7 @@ class MessageController extends Controller
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000009,
-            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
+            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
             'token' => 'message',
             'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
         ];
