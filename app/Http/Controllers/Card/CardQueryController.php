@@ -18,7 +18,7 @@ class CardQueryController extends Controller
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000004,
-            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
+            'secret' => 'hBG4YLg-fdwueGsexVN9LC8WkpJvnJ5mtW_2n9Ti_Jo',
             'token' => 'CardQuery',
             'aes_key' => 'QUM5w3LOduQ1kXYfmEn3FbmAKyU9OJOfeEpX5A9Ylgw',
         ];
