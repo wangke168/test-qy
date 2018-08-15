@@ -18,10 +18,13 @@ class MessageController extends Controller
     {
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
-            'agent_id' => 1000009,
-            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
-            'token' => 'message',
-            'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
+
+            'agent_id' => 1000004,
+            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
+
+            // server config
+            'token' => 'test',
+            'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
         ];
         $this->weObj=Factory::work($this->config);
     }
