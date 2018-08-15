@@ -40,7 +40,7 @@ class SendMessage extends Command
     public function handle()
     {
 
-        $url = "https://" . $_SERVER['HTTP_HOST'] . "/sendmessage";
+        $url = "https://qy.hdymxy.com/sendmessage";
         $this->curlPost($url);
 
     }

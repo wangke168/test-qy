@@ -27,6 +27,7 @@ class JianPiaoController extends Controller
 
     public function index()
     {
+
         $this->weObj->server->push(function ($message) {
 
             switch ($message['MsgType']) {
