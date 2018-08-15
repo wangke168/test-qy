@@ -22,7 +22,7 @@ Route::any('/jianpiao', 'JianPiao\JianPiaoController@index');
 
 Route::any('/cardquery', 'Card\CardQueryController@index');
 
-Route::get('/temp','TestController@temp');
+Route::get('/temp','Test\TestController@temp');
 
 Route::get('/message','Message\MessageController@index');
 
