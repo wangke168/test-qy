@@ -19,7 +19,7 @@ class MessageController extends Controller
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000009,
-            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
+            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
             'token' => 'message',
             'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
         ];
@@ -52,7 +52,7 @@ class MessageController extends Controller
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
         $msg = $this->message();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
-        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
 
     }
