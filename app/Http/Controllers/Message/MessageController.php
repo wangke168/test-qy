@@ -28,36 +28,19 @@ class MessageController extends Controller
 
     public function index()
     {
-
         $this->weObj->server->push(function ($message) {
 
-            $today = Carbon::now()->toDateString();
-//        return $today;
-            $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            $json = curl_exec($ch);
-            $data = json_decode($json, true);
-
-
-            $str = $today . "数据如下\n";
-            $str = $str . $data['resultList'][0]['section'] . "\n";
-            $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
-            $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
-            $str = $str . $data['resultList'][1]['section'] . "\n";
-            $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
-            $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
-            $str = $str . $data['resultList'][2]['section'] . "\n";
-            $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
-            $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
-            return $str;
-
+            switch ($message['MsgType']) {
+                case 'text':
+                    $news=$this->Check_tecket($message['Content']);
+                    return $news;
+                    break;
+                default:
+                    return '收到其它消息';
+                    break;
+            }
         });
-
         $response = $this->weObj->server->serve();
-
         return $response;
     }
 
@@ -118,5 +101,59 @@ class MessageController extends Controller
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
+    }
+
+    private function Check_tecket($tel)
+    {
+        $url = env('QY_WECHAT_JIANPIAO_URL', 'url');
+        $url = $url . $tel;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        $ticketcount = count($data['ticketorder']);
+        $inclusivecount = count($data['inclusiveorder']);
+        $hotelcount = count($data['hotelorder']);
+
+
+        $i = 0;
+
+        //    $str=$str."姓名：".$name."   电话：".$tel."\n";
+        if ($ticketcount <> 0) {
+//            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
+            $str = "您好，该客人的预订信息如下";
+            for ($j = 0; $j < $ticketcount; $j++) {
+                $i = $i + 1;
+                $str = $str . "\n订单" . $i;
+                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
+                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
+                $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
+                $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
+                $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
+                /* if ($data['ticketorder'][$j]['ticket'] == '三大点+梦幻谷' || $data['ticketorder'][$j]['ticket'] == '网络联票+梦幻谷') {
+                     $str = $str . "\n注意：该票种需要身份证检票";
+                 } else {*/
+                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
+//                }
+                $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
+            }
+        } else {
+            $str = "该手机号下无门票订单";
+        }
+
+
+        $items = [
+            new NewsItem([
+                'title' => '查询结果',
+                'description' => $str,
+                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
+            ]),
+
+        ];
+        $news = new News($items);
+
+        return $str;
     }
 }
