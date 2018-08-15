@@ -62,39 +62,40 @@ class TestController extends Controller
 
     public function test()
     {
-        $config=[
+        $config = [
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000004,
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
             'token' => 'test',
             'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
         ];
-        $weObj=Factory::work($config);
+        $weObj = Factory::work($config);
         $accessToken = $weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
-        $msg=$this->message();
+        $msg = $this->message();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
-        $data="{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"asdasdas\"},\"safe\":0}";
-        $res = $this->curlPost($url,$data);
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"asdasdas\"},\"safe\":0}";
+        $this->curlPost($url, $data);
 
     }
 
-    private function curlPost($url,$data=""){
+    private function curlPost($url, $data = "")
+    {
         $ch = curl_init();
         $opt = array(
-            CURLOPT_URL     => $url,
-            CURLOPT_HEADER  => 0,
-            CURLOPT_POST    => 1,
-            CURLOPT_POSTFIELDS      => $data,
-            CURLOPT_RETURNTRANSFER  => 1,
-            CURLOPT_TIMEOUT         => 20
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => 0,
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_TIMEOUT => 20
         );
-        $ssl = substr($url,0,8) == "https://" ? TRUE : FALSE;
-        if ($ssl){
+        $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
+        if ($ssl) {
             $opt[CURLOPT_SSL_VERIFYHOST] = 2;
             $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
         }
-        curl_setopt_array($ch,$opt);
+        curl_setopt_array($ch, $opt);
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
