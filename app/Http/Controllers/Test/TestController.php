@@ -203,4 +203,9 @@ class TestController extends Controller
 //       $this->weObj->customer_service->message($news)->to($openId)->send();
         return $str;
     }
+
+    public function temp()
+    {
+        phpinfo();
+    }
 }

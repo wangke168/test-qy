@@ -46,6 +46,7 @@ class SendMessage extends Command
     }
     private function curlPost($url,$data="")
     {
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
