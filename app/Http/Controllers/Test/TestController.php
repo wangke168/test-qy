@@ -34,7 +34,7 @@ class TestController extends Controller
 
     }
 
-    public function message($content='')
+    public function message()
     {
         $today = Carbon::now()->toDateString();
 //        return $today;
@@ -69,12 +69,12 @@ class TestController extends Controller
             'token' => 'test',
             'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
         ];
-        $app=Factory::work($config);
-        $accessToken = $app->access_token;
+        $weObj=Factory::work($config);
+        $accessToken = $weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
         $msg=$this->message();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
-        $data="{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $data="{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"asdasdas\"},\"safe\":0}";
         $res = $this->curlPost($url,$data);
 
     }
