@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
@@ -17,27 +18,42 @@ class MessageController extends Controller
     {
         $this->config=[
             'corp_id' => 'wwfb1970349326c73f',
-            'agent_id' => 1000004,
+            'agent_id' => 1000009,
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
-            'token' => 'test',
-            'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
+            'token' => 'message',
+            'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
         ];
         $this->weObj=Factory::work($this->config);
     }
 
     public function index()
     {
+
         $this->weObj->server->push(function ($message) {
 
-            switch ($message['MsgType']) {
-                case 'text':
-                    $news=$this->CheckTicket($message['Content']);
-                    return $news;
-                    break;
-                default:
-                    return '收到其它消息';
-                    break;
-            }
+/*            $today = Carbon::now()->toDateString();
+            $url = env('YDPT_URL', 'url');
+            $url = $url."CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            $json = curl_exec($ch);
+            $data = json_decode($json, true);
+
+
+            $str = $today . "数据如下\n";
+            $str = $str . $data['resultList'][0]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
+            $str = $str . $data['resultList'][1]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
+            $str = $str . $data['resultList'][2]['section'] . "\n";
+            $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
+            $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";*/
+            return $this->Message();
+
         });
 
         $response = $this->weObj->server->serve();
@@ -45,52 +61,62 @@ class MessageController extends Controller
         return $response;
     }
 
-    private function CheckTicket($DID)
+
+    public function SendMessage()
     {
-        $url = env('QY_WECHAT_CARD_URL', 'url');
-        $url = $url . $DID;
+
+        $accessToken = $this->weObj->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        $msg = $this->message();
+        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000004,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $this->curlPost($url, $data);
+
+    }
+    private function Message()
+    {
+        $today = Carbon::now()->toDateString();
+        $url = env('YDPT_URL', 'url');
+        $url = $url."CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        $ticketcount = count($data['ticketorder']);
-        $i = 0;
 
-        if ($ticketcount <> 0) {
-            $str = "您好，该客人的年卡信息如下\n";
-            $str = "姓名：".$data['ticketorder'][0]['name']."\n";
-            for ($j = 0; $j < $ticketcount; $j++) {
-                $i = $i + 1;
-//                $str = $str . "\n种类" . $i;
-//                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-                $str = $str . "\n年卡类型:" . $data['ticketorder'][$j]['ticket'];
-                $str = $str . "\n年卡状态:" . $data['ticketorder'][$j]['content'] . "\n";
-            }
-            $str = $str . "\n注意：已挂失及未发卡状态的年卡无法入园。\n\n如有疑问请致电057989600055。";
-        } else {
-            $str = "该身份证号下无年卡信息，如有疑问请致电057989600055。";
+
+        $str = $today . "数据如下\n";
+        $str = $str . $data['resultList'][0]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][1]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][2]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
+        return $str;
+    }
+    private function curlPost($url, $data = "")
+    {
+        $ch = curl_init();
+        $opt = array(
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => 0,
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_TIMEOUT => 20
+        );
+        $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
+        if ($ssl) {
+            $opt[CURLOPT_SSL_VERIFYHOST] = 2;
+            $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
         }
-
-
-        $items = [
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-//                'image'       => $image,
-
-            ]),
-
-
-        ];
-        $news = new News($items);
-
-        return $news;
-
-
-
-
+        curl_setopt_array($ch, $opt);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
     }
 }
