@@ -21,8 +21,8 @@ class MessageController extends Controller
         $this->config = [
             'corp_id' => 'wwfb1970349326c73f',
 
-            'agent_id' => 1000009,
-            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
+            'agent_id' => 1000010,
+            'secret' => 'jBcAo4eYZr0xTEFAbEVzGw_bHS0zWDRHRUvghmFgOvE',
 
             // server config
             'token' => 'message',
