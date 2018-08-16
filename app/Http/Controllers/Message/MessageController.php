@@ -20,7 +20,7 @@ class MessageController extends Controller
             'corp_id' => 'wwfb1970349326c73f',
 
             'agent_id' => 1000009,
-            'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
+            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
 
             // server config
             'token' => 'message',
@@ -31,10 +31,8 @@ class MessageController extends Controller
 
     public function index()
     {
-        $accessToken = $this->weObj->access_token;
-        $token = $accessToken->getToken();
-        return $token;
-       /* $this->weObj->server->push(function ($message) {
+
+        $this->weObj->server->push(function ($message) {
 
             switch ($message['MsgType']) {
                 case 'text':
@@ -50,7 +48,7 @@ class MessageController extends Controller
 
         $response = $this->weObj->server->serve();
 
-        return $response;*/
+        return $response;
     }
 
 
