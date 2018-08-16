@@ -11,6 +11,7 @@ use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 
+
 class MessageController extends Controller
 {
     public $weObj;
