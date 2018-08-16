@@ -60,7 +60,7 @@ class TestController extends Controller
         return $str;
     }
 
-    public function test()
+    public function temp()
     {
         $config = [
             'corp_id' => 'wwfb1970349326c73f',
@@ -204,8 +204,5 @@ class TestController extends Controller
         return $str;
     }
 
-    public function temp()
-    {
-        phpinfo();
-    }
+
 }
