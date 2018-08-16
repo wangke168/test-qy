@@ -62,15 +62,15 @@ class TestController extends Controller
 
     public function temp()
     {
-        $config = [
+        /*$config = [
             'corp_id' => 'wwfb1970349326c73f',
             'agent_id' => 1000004,
             'secret' => 'TsbKy9F_yo_d3bXKJ0HNqgcq4FjXW3dPXmXLhyVm918',
             'token' => 'test',
             'aes_key' => 'uY5rLOibklJSaHt8suAz861k7jQdUc8a0vrv4crvNq8',
         ];
-        $weObj = Factory::work($config);
-        $accessToken = $weObj->access_token;
+        $weObj = Factory::work($config);*/
+        $accessToken = $this->weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
         $msg = $this->message();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
