@@ -39,8 +39,8 @@ class MessageController extends Controller
                     break;
                 case 'event':
                     # 事件消息...
-                    switch ($message['Event']) {
-                        case 'CLICK':
+                    switch ($message['event']) {
+                        case 'click':
                             return $message['EventKey'];
                             /*switch ($message['EventKey']) {
                                 case "1":
