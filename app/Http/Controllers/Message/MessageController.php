@@ -33,8 +33,30 @@ class MessageController extends Controller
     public function index()
     {
         $this->weObj->server->push(function ($message) {
-            return $this->message();
+            switch ($message['MsgType']) {
+                case 'text':
+                    return $this->message();
+                    break;
+                case 'event':
+                    # 事件消息...
+                    switch ($message['Event']) {
+                        case 'CLICK':
+                            switch ($message['EventKey']) {
+                                case "1":
+                                    return $this->message();
+                                default:
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                default:
+                    return '收到其它消息';
+                    break;
+            }
         });
+
+
         $response = $this->weObj->server->serve();
         return $response;
     }
@@ -76,7 +98,7 @@ class MessageController extends Controller
     {
         $today = Carbon::now()->toDateString();
         $url = env('YDPT_URL', 'url');
-        $url = $url."CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
+        $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

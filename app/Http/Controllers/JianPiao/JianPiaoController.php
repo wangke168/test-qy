@@ -47,6 +47,7 @@ class JianPiaoController extends Controller
 //检票口
     private function Check_tecket($tel)
     {
+
         $url = env('YDPT_URL', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
         $ch = curl_init();
