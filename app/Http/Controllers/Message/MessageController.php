@@ -41,12 +41,13 @@ class MessageController extends Controller
                     # 事件消息...
                     switch ($message['Event']) {
                         case 'CLICK':
-                            switch ($message['EventKey']) {
+                            return $message['EventKey'];
+                            /*switch ($message['EventKey']) {
                                 case "1":
                                     return $this->message();
                                 default:
                                     break;
-                            }
+                            }*/
                             break;
                     }
                     break;
