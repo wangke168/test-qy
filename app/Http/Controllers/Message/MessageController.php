@@ -75,7 +75,8 @@ class MessageController extends Controller
     public function message()
     {
         $today = Carbon::now()->toDateString();
-        $url = "http://10.0.61.202/CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
+        $url = env('YDPT_URL', 'url');
+        $url = $url."CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
