@@ -61,7 +61,7 @@ class MessageController extends Controller
         return $response;
     }
 
-    public function sendmessage()
+    public function SendMessage()
     {
         $accessToken = $this->weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
@@ -116,5 +116,10 @@ class MessageController extends Controller
         $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
         return $str;
+    }
+
+    public function Temp()
+    {
+        var_dump($this->weObj->menu->get());
     }
 }

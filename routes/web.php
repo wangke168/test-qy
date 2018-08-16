@@ -27,3 +27,5 @@ Route::get('/temp','Test\TestController@temp');
 Route::any('/message','Message\MessageController@index');
 
 Route::get('/sendmessage','Message\MessageController@SendMessage');
+
+Route::get('/message/temp','Message\MessageController@Temp');
