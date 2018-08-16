@@ -47,8 +47,8 @@ class CardQueryController extends Controller
 
     private function CheckTicket($DID)
     {
-        $url = env('QY_WECHAT_CARD_URL', 'url');
-        $url = $url . $DID;
+        $url = env('YDPT_URL', 'url');
+        $url = $url ."searchorder_json.aspx?id=". $DID;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
