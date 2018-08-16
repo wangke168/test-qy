@@ -24,6 +24,6 @@ Route::any('/cardquery', 'Card\CardQueryController@index');
 
 Route::get('/temp','Test\TestController@temp');
 
-Route::get('/message','Message\MessageController@index');
+Route::any('/message','Message\MessageController@index');
 
 Route::get('/sendmessage','Message\MessageController@SendMessage');
