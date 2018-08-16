@@ -65,8 +65,8 @@ class MessageController extends Controller
             'token' => 'message',
             'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
         ];
-        $weObj = Factory::work($config);
-        $accessToken = $weObj->access_token;
+//        $weObj = Factory::work($config);
+        $accessToken = $this->weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
         $msg = $this->message();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
