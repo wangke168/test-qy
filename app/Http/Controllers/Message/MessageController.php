@@ -31,7 +31,10 @@ class MessageController extends Controller
 
     public function index()
     {
-        $this->weObj->server->push(function ($message) {
+        $accessToken = $this->weObj->access_token;
+        $token = $accessToken->getToken();
+        return $token;
+       /* $this->weObj->server->push(function ($message) {
 
             switch ($message['MsgType']) {
                 case 'text':
@@ -47,7 +50,7 @@ class MessageController extends Controller
 
         $response = $this->weObj->server->serve();
 
-        return $response;
+        return $response;*/
     }
 
 
