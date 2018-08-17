@@ -17,15 +17,16 @@ Route::get('/', function () {
 
 Route::any('/test', 'Test\TestController@index');
 
-
 Route::any('/jianpiao', 'JianPiao\JianPiaoController@index');
 
 Route::any('/cardquery', 'Card\CardQueryController@index');
-
-Route::get('/temp','Test\TestController@temp');
 
 Route::any('/message','Message\MessageController@index');
 
 Route::get('/sendmessage','Message\MessageController@SendMessage');
 
+
+//测试
 Route::get('/message/temp','Message\MessageController@Temp');
+
+Route::get('/temp','Test\TestController@temp');

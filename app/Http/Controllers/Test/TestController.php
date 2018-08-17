@@ -62,12 +62,7 @@ class TestController extends Controller
 
     public function temp()
     {
-        $ip = "2018-08-01 2018-08-10"; // some IP address
-        $iparr = explode (" ", $ip);
-        print "$iparr[0] <br />";
-        print "$iparr[1] <br />" ;
-        print "$iparr[2] <br />"  ;
-        print "$iparr[3] <br />"  ;
+        echo date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
 
     }
 

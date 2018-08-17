@@ -24,7 +24,6 @@ class MessageController extends Controller
             'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
             'token' => 'message',
             'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
-
         ];
         $this->weObj = Factory::work($this->config);
 
@@ -50,11 +49,10 @@ class MessageController extends Controller
                                     return $this->message($today, $today);
                                     break;
                                 case "2":
-                                    return '输入日期端';
-
+                                    $StartDate=date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
+                                    $EndDate=Carbon::now()->toDateString();
+                                    return $this->message($StartDate, $EndDate);
                                     break;
-
-
                                 default:
                                     break;
                             }
@@ -66,8 +64,6 @@ class MessageController extends Controller
                     break;
             }
         });
-
-
         $response = $this->weObj->server->serve();
         return $response;
     }
@@ -76,11 +72,11 @@ class MessageController extends Controller
     {
         $accessToken = $this->weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
-        $msg = $this->message();
+        $today = Carbon::now()->toDateString();
+        $msg= $this->message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
-
     }
 
     private function curlPost($url, $data = "")
@@ -107,7 +103,6 @@ class MessageController extends Controller
 
     public function message($StartDate, $EndDate)
     {
-
         $url = env('YDPT_URL', 'url');
         $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $StartDate . "&enddate=" . $EndDate;
         $ch = curl_init();
@@ -116,7 +111,12 @@ class MessageController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        $str = $StartDate . "-" . $EndDate . "数据如下\n";
+        if ($StartDate==$EndDate){
+            $str = $StartDate . "数据如下\n";
+        }
+        else{
+            $str = $StartDate . "---" . $EndDate . "数据如下\n";
+        }
         $str = $str . $data['resultList'][0]['section'] . "\n";
         $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
