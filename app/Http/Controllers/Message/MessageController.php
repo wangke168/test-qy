@@ -65,7 +65,7 @@ class MessageController extends Controller
                                     break;
                                 case "5":
                                     $StartDate = "2018-01-01";
-                                    $EndDate = date('Y-m-d', strtotime(date('Y-m', time()) . '-01 00:00:00') - 86400);
+                                    $EndDate = Carbon::now()->toDateString();
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 default:
