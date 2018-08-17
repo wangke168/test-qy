@@ -49,8 +49,23 @@ class MessageController extends Controller
                                     return $this->message($today, $today);
                                     break;
                                 case "2":
-                                    $StartDate=date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
-                                    $EndDate=Carbon::now()->toDateString();
+                                    $StartDate = date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
+                                    $EndDate = Carbon::now()->toDateString();
+                                    return $this->message($StartDate, $EndDate);
+                                    break;
+                                case "3":
+                                    $StartDate = date('Y-m-d', strtotime('-1 monday', time()));
+                                    $EndDate = date('Y-m-d', strtotime('-1 sunday', time()));
+                                    return $this->message($StartDate, $EndDate);
+                                    break;
+                                case "4":
+                                    $StartDate = date('Y-m-d', strtotime(date('Y-m', time()) . '-01 00:00:00'));
+                                    $EndDate = Carbon::now()->toDateString();
+                                    return $this->message($StartDate, $EndDate);
+                                    break;
+                                case "5":
+                                    $StartDate = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m', time()) . '-01 00:00:00')));
+                                    $EndDate = date('Y-m-d', strtotime(date('Y-m', time()) . '-01 00:00:00') - 86400);
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 default:
@@ -73,7 +88,7 @@ class MessageController extends Controller
         $accessToken = $this->weObj->access_token;
         $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
         $today = Carbon::now()->toDateString();
-        $msg= $this->message($today, $today);
+        $msg = $this->message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
@@ -111,10 +126,9 @@ class MessageController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        if ($StartDate==$EndDate){
+        if ($StartDate == $EndDate) {
             $str = $StartDate . "数据如下\n";
-        }
-        else{
+        } else {
             $str = $StartDate . "---" . $EndDate . "数据如下\n";
         }
         $str = $str . $data['resultList'][0]['section'] . "\n";

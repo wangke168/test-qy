@@ -62,7 +62,7 @@ class TestController extends Controller
 
     public function temp()
     {
-        echo date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
+        echo date('Y-m-d', strtotime('-1 sunday', time()));
 
     }
 
