@@ -35,7 +35,10 @@ class MessageController extends Controller
         $this->weObj->server->push(function ($message) {
             switch ($message['MsgType']) {
                 case 'text':
-                    return $this->message();
+                    $str = explode(" ", $message['Content']);
+                    $StartDate = $str[0];
+                    $EndDate = $str[1];
+                    return $this->message($StartDate, $EndDate);
                     break;
                 case 'event':
                     # 事件消息...
@@ -43,7 +46,15 @@ class MessageController extends Controller
                         case 'click':
                             switch ($message['EventKey']) {
                                 case "1":
-                                    return $this->message();
+                                    $today = Carbon::now()->toDateString();
+                                    return $this->message($today, $today);
+                                    break;
+                                case "2":
+                                    return '输入日期端';
+
+                                    break;
+
+
                                 default:
                                     break;
                             }
@@ -94,18 +105,18 @@ class MessageController extends Controller
         return $data;
     }
 
-    public function message()
+    public function message($StartDate, $EndDate)
     {
-        $today = Carbon::now()->toDateString();
+
         $url = env('YDPT_URL', 'url');
-        $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $today . "&enddate=" . $today;
+        $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $StartDate . "&enddate=" . $EndDate;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        $str = $today . "数据如下\n";
+        $str = $StartDate . "-" . $EndDate . "数据如下\n";
         $str = $str . $data['resultList'][0]['section'] . "\n";
         $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
