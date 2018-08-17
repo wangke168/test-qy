@@ -49,12 +49,12 @@ class MessageController extends Controller
                                     return $this->message($today, $today);
                                     break;
                                 case "2":
-                                    $StartDate = date('Y-m-d', (time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600));
+                                    $StartDate = date('Y-m-d', strtotime('-1 monday', time()));
                                     $EndDate = Carbon::now()->toDateString();
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 case "3":
-                                    $StartDate = date('Y-m-d', strtotime('-1 monday', time()));
+                                    $StartDate = date('Y-m-d', strtotime('-2 monday', time()));
                                     $EndDate = date('Y-m-d', strtotime('-1 sunday', time()));
                                     return $this->message($StartDate, $EndDate);
                                     break;
