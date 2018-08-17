@@ -64,6 +64,11 @@ class MessageController extends Controller
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 case "5":
+                                    $StartDate = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m', time()) . '-01 00:00:00')));
+                                    $EndDate = date('Y-m-d', strtotime(date('Y-m', time()) . '-01 00:00:00') - 86400);
+                                    return $this->message($StartDate, $EndDate);
+                                    break;
+                                case "6":
                                     $StartDate = "2018-01-01";
                                     $EndDate = Carbon::now()->toDateString();
                                     return $this->message($StartDate, $EndDate);
