@@ -62,7 +62,7 @@ class TestController extends Controller
 
     public function temp()
     {
-        echo date('Y-m-d', strtotime('-2 monday', time()));
+        echo date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m', time()) . '-01 00:00:00')));
 
     }
 
