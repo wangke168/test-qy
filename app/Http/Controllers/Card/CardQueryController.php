@@ -16,11 +16,11 @@ class CardQueryController extends Controller
     public function __construct()
     {
         $this->config=[
-            'corp_id' => 'wwfb1970349326c73f',
-            'agent_id' => 1000004,
-            'secret' => 'hBG4YLg-fdwueGsexVN9LC8WkpJvnJ5mtW_2n9Ti_Jo',
-            'token' => 'CardQuery',
-            'aes_key' => 'QUM5w3LOduQ1kXYfmEn3FbmAKyU9OJOfeEpX5A9Ylgw',
+            'corp_id' => env('QY_WECHAT_APPID', 'corp_id'),
+            'agent_id' => env('QY_WECHAT_CARD_AGENTID', 'agent_id'),
+            'secret' => env('QY_WECHAT_CARD_APPSECRET', 'secret'),
+            'token' => env('QY_WECHAT_CARD_TOEKN', 'token'),
+            'aes_key' => env('QY_WECHAT_CARD_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj=Factory::work($this->config);
     }
