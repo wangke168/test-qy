@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Card;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
@@ -60,11 +59,10 @@ class CardQueryController extends Controller
 
         if ($ticketcount <> 0) {
             $str = "您好，该客人的年卡信息如下\n";
-            $str = "姓名：".$data['ticketorder'][0]['name']."\n";
+            $str = $str."姓名：".$data['ticketorder'][0]['name']."\n";
             for ($j = 0; $j < $ticketcount; $j++) {
                 $i = $i + 1;
-//                $str = $str . "\n种类" . $i;
-//                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
+
                 $str = $str . "\n年卡类型:" . $data['ticketorder'][$j]['ticket'];
                 $str = $str . "\n年卡状态:" . $data['ticketorder'][$j]['content'] . "\n";
             }
@@ -72,7 +70,6 @@ class CardQueryController extends Controller
         } else {
             $str = "该身份证号下无年卡信息，如有疑问请致电057989600055。";
         }
-
 
         $items = [
             new NewsItem([

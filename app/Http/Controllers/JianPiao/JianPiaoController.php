@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\JianPiao;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use EasyWeChat\Factory;
-use EasyWeChat\Work;
-use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 class JianPiaoController extends Controller
@@ -16,11 +13,11 @@ class JianPiaoController extends Controller
     public function __construct()
     {
         $this->config=[
-            'corp_id' => 'wwfb1970349326c73f',
-            'agent_id' => 1000003,
-            'secret' => 'Fh7r_eihHhtjjmgKh9k7HuVlGBj-sSNV0AU5Pu8Y0ng',
-            'token' => 'jianpiao',
-            'aes_key' => 'X5HFXA537wZkVwUicueeuPlsGgvgftDPdyv9pnNMaMp',
+            'corp_id' => env('QY_WECHAT_APPID', 'corp_id'),
+            'agent_id' => env('QY_WECHAT_JIANPIAO_AGENTID', 'agent_id'),
+            'secret' => env('QY_WECHAT_JIANPIAO_APPSECRET', 'secret'),
+            'token' => env('QY_WECHAT_JIANPIAO_TOEKN', 'token'),
+            'aes_key' => env('QY_WECHAT_JIANPIAO_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj=Factory::work($this->config);
     }
@@ -57,8 +54,7 @@ class JianPiaoController extends Controller
         $json = curl_exec($ch);
         $data = json_decode($json, true);
         $ticketcount = count($data['ticketorder']);
-        $inclusivecount = count($data['inclusiveorder']);
-        $hotelcount = count($data['hotelorder']);
+
 
 
         $i = 0;

@@ -3,13 +3,8 @@
 namespace App\Http\Controllers\Message;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use EasyWeChat\Factory;
-use EasyWeChat\Work;
-use EasyWeChat\Kernel\Messages\Text;
-use EasyWeChat\Kernel\Messages\News;
-use EasyWeChat\Kernel\Messages\NewsItem;
 
 class MessageController extends Controller
 {
@@ -19,11 +14,11 @@ class MessageController extends Controller
     public function __construct()
     {
         $this->config = [
-            'corp_id' => 'wwfb1970349326c73f',
-            'agent_id' => 1000009,
-            'secret' => 'kEJJDuCTuSXwf6DyAXFxee1VnNFC5HfEpldCkMRqs9o',
-            'token' => 'message',
-            'aes_key' => 'JGDBtwV7jgujnJbbfKC1DOEExK7al8lFTM5GkUeLCsI',
+            'corp_id' => env('QY_WECHAT_APPID', 'corp_id'),
+            'agent_id' => env('QY_WECHAT_MESSAGE_AGENTID', 'agent_id'),
+            'secret' => env('QY_WECHAT_MESSAGE_APPSECRET', 'secret'),
+            'token' => env('QY_WECHAT_MESSAGE_TOEKN', 'token'),
+            'aes_key' => env('QY_WECHAT_MESSAGE_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj = Factory::work($this->config);
 
