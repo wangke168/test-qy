@@ -151,7 +151,7 @@ class MessageController extends Controller
             $str = $str . "营收:" . round($data['resultList'][$x]['turnover'], 2) . "元\n";
             $str = $str . "人次:" . $data['resultList'][$x]['personTime'] . "\n\n";
         }
-        /*$str = $str . $data['resultList'][0]['section'] . "\n";
+        $str = $str . $data['resultList'][0]['section'] . "\n";
         $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
         $str = $str . $data['resultList'][1]['section'] . "\n";
@@ -159,7 +159,7 @@ class MessageController extends Controller
         $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
         $str = $str . $data['resultList'][2]['section'] . "\n";
         $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
-        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";*/
+        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
         return $str;
     }
 
@@ -171,7 +171,7 @@ class MessageController extends Controller
         $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
         $data = $this->curl($url);
         $count = count($data);
-        $str = $today . '游览车未检票数据';
+        $str = $today . "游览车未检票数据\n\n";
         for ($x = 0; $x < $count; $x++) {
             $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
         }
