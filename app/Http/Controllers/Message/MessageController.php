@@ -22,7 +22,7 @@ class MessageController extends Controller
             'aes_key' => env('QY_WECHAT_MESSAGE_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj = Factory::work($this->config);
-        $token = $this->weObj->access_token->getToken();
+        $this->token = $this->weObj->access_token->getToken();
 
     }
 
