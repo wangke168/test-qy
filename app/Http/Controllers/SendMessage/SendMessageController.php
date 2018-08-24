@@ -24,13 +24,13 @@ class SendMessageController extends Controller
         ];
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
-        $this->getCarMessage=env('Get_CarMessage', 'hd_wangke');;
+        $this->getCarMessage = env('Get_CarMessage', 'hd_wangke');;
 
     }
 
     public function index()
     {
-        $this->weObj->server->push(function(){
+        $this->weObj->server->push(function () {
             return 'Hello easywechat.';
         });
         $response = $this->weObj->server->serve();
@@ -63,12 +63,12 @@ class SendMessageController extends Controller
         $data = $this->curl($url);
         $count = count($data);
         $str = $today . "游览车未检票数据\n\n";
-        $number=0;
+        $number = 0;
         for ($x = 0; $x < $count; $x++) {
             $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
-            $number=$number+$data[$x]['number'];
+            $number = $number + $data[$x]['number'];
         }
-        $str=$str."\n总共".$count."笔订单，".$number.'人。';
+        $str = $str . "\n总共" . $count . "笔订单，" . $number . '人。';
         return $str;
     }
 
@@ -104,5 +104,4 @@ class SendMessageController extends Controller
         curl_close($ch);
         return $data;
     }
-
 }

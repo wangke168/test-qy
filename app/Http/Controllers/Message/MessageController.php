@@ -12,6 +12,7 @@ class MessageController extends Controller
     public $config;
     public $token;
     public $getMessage;
+
     public function __construct()
     {
         $this->config = [
@@ -23,7 +24,7 @@ class MessageController extends Controller
         ];
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
-        $this->getMessage=env('Get_Message', 'hd_wangke');;
+        $this->getMessage = env('Get_Message', 'hd_wangke');;
     }
 
     public function index()
@@ -85,24 +86,12 @@ class MessageController extends Controller
         return $response;
     }
 
-
     public function SendMessage()
     {
         $today = Carbon::now()->toDateString();
         $msg = $this->Message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $this->curlPost($url, $data);
-    }
-
-    /**
-     *发送游览车未用数据
-     */
-    public function SendCarMessage()
-    {
-        $msg = $this->CarMessage();
-        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
-        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
     }
 
@@ -135,26 +124,6 @@ class MessageController extends Controller
         return $str;
     }
 
-    /**
-     * 每日游览车数据
-     * @return string
-     */
-    public function CarMessage()
-    {
-        $today = Carbon::now()->toDateString();
-        $url = env('YDPT_URL', 'url');
-        $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
-        $data = $this->curl($url);
-        $count = count($data);
-        $str = $today . "游览车未检票数据\n\n";
-        $number=0;
-        for ($x = 0; $x < $count; $x++) {
-            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
-            $number=$number+$data[$x]['number'];
-        }
-        $str=$str."\n总共".$count."笔订单，".$number.'人。';
-        return $str;
-    }
 
     private function curl($url)
     {
