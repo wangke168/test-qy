@@ -85,10 +85,11 @@ class MessageController extends Controller
         return $response;
     }
 
+    /**
+     *发送游览车未用数据
+     */
     public function SendMessage()
     {
-        /*$accessToken = $this->weObj->access_token;
-        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
         $today = Carbon::now()->toDateString();
         $msg = $this->Message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
@@ -98,14 +99,69 @@ class MessageController extends Controller
 
     public function SendCarMessage()
     {
-        /*       $accessToken = $this->weObj->access_token;
-               $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
         $msg = $this->CarMessage();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
     }
 
+
+    /**
+     * 报表数据
+     * @param $StartDate
+     * @param $EndDate
+     * @return string
+     */
+    public function Message($StartDate, $EndDate)
+    {
+        $url = env('YDPT_URL', 'url');
+        $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $StartDate . "&enddate=" . $EndDate;
+        $data = $this->curl($url);
+        if ($StartDate == $EndDate) {
+            $str = $StartDate . "数据如下\n";
+        } else {
+            $str = $StartDate . "---" . $EndDate . "数据如下\n";
+        }
+        $str = $str . $data['resultList'][0]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][1]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
+        $str = $str . $data['resultList'][2]['section'] . "\n";
+        $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
+        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
+        return $str;
+    }
+
+    /**
+     * 每日游览车数据
+     * @return string
+     */
+    public function CarMessage()
+    {
+        $today = Carbon::now()->toDateString();
+        $url = env('YDPT_URL', 'url');
+        $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
+        $data = $this->curl($url);
+        $count = count($data);
+        $str = $today . "游览车未检票数据\n\n";
+        for ($x = 0; $x < $count; $x++) {
+            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
+        }
+        return $str;
+    }
+
+    private function curl($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        return $data;
+    }
 
     private function curlPost($url, $data = "")
     {
@@ -128,68 +184,6 @@ class MessageController extends Controller
         curl_close($ch);
         return $data;
     }
-
-    /**
-     * 报表数据
-     * @param $StartDate
-     * @param $EndDate
-     * @return string
-     */
-    public function Message($StartDate, $EndDate)
-    {
-        $url = env('YDPT_URL', 'url');
-        $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $StartDate . "&enddate=" . $EndDate;
-        $data = $this->curl($url);
-        $count = count($data);
-        if ($StartDate == $EndDate) {
-            $str = $StartDate . "数据如下\n";
-        } else {
-            $str = $StartDate . "---" . $EndDate . "数据如下\n";
-        }
-        for ($x = 0; $x < $count; $x++) {
-            $str = $str . $data['resultList'][$x]['section'] . "\n";
-            $str = $str . "营收:" . round($data['resultList'][$x]['turnover'], 2) . "元\n";
-            $str = $str . "人次:" . $data['resultList'][$x]['personTime'] . "\n\n";
-        }
-        $str = $str . $data['resultList'][0]['section'] . "\n";
-        $str = $str . "营收:" . round($data['resultList'][0]['turnover'], 2) . "元\n";
-        $str = $str . "人次:" . $data['resultList'][0]['personTime'] . "\n\n";
-        $str = $str . $data['resultList'][1]['section'] . "\n";
-        $str = $str . "营收:" . round($data['resultList'][1]['turnover'], 2) . "元\n";
-        $str = $str . "人次:" . $data['resultList'][1]['personTime'] . "\n\n";
-        $str = $str . $data['resultList'][2]['section'] . "\n";
-        $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
-        $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
-        return $str;
-    }
-
-
-    public function CarMessage()
-    {
-        $today = Carbon::now()->toDateString();
-        $url = env('YDPT_URL', 'url');
-        $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
-        $data = $this->curl($url);
-        $count = count($data);
-        $str = $today . "游览车未检票数据\n\n";
-        for ($x = 0; $x < $count; $x++) {
-            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
-        }
-
-        return $str;
-    }
-
-    private function curl($url)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $json = curl_exec($ch);
-        $data = json_decode($json, true);
-        return $data;
-    }
-
 
     public function Temp()
     {
