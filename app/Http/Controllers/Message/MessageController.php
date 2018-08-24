@@ -178,7 +178,7 @@ class MessageController extends Controller
         $data = json_decode($json, true);
         $count=count($data);
         $str=$today.'游览车未检票数据';
-        for ($x=0; $x=$count; $x++){
+        for ($x=0; $x<$count; $x++){
             $str = $str . $data[$x]['password'] . "\n";
         }
 
