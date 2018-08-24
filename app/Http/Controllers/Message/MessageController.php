@@ -177,8 +177,8 @@ class MessageController extends Controller
         $json = curl_exec($ch);
         $data = json_decode($json, true);
         $str=$today.'游览车未检票数据';
-        $str = $str . $data[0]['password'] . "\n";
-        return count($data);
+        $str = $str . $data[27]['password'] . "\n";
+        return $str;
     }
 
     public function Temp()
