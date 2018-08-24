@@ -176,8 +176,12 @@ class MessageController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
+        $count=count($data);
         $str=$today.'游览车未检票数据';
-        $str = $str . $data[27]['password'] . "\n";
+        for ($x=0; $x=$count; $x++){
+            $str = $str . $data[$x]['password'] . "\n";
+        }
+
         return $str;
     }
 
