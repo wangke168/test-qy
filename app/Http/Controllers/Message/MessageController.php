@@ -85,9 +85,7 @@ class MessageController extends Controller
         return $response;
     }
 
-    /**
-     *发送游览车未用数据
-     */
+
     public function SendMessage()
     {
         $today = Carbon::now()->toDateString();
@@ -97,6 +95,9 @@ class MessageController extends Controller
         $this->curlPost($url, $data);
     }
 
+    /**
+     *发送游览车未用数据
+     */
     public function SendCarMessage()
     {
         $msg = $this->CarMessage();
