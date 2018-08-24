@@ -98,15 +98,14 @@ class MessageController extends Controller
 
     public function SendCarMessage()
     {
- /*       $accessToken = $this->weObj->access_token;
-        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
+        /*       $accessToken = $this->weObj->access_token;
+               $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
         $today = Carbon::now()->toDateString();
         $msg = $this->message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
     }
-
 
 
     private function curlPost($url, $data = "")
@@ -170,20 +169,32 @@ class MessageController extends Controller
         $today = Carbon::now()->toDateString();
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
+        /*$ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);*/
+        $data = $this->curl($url);
+        $count = count($data);
+        $str = $today . '游览车未检票数据';
+        for ($x = 0; $x < $count; $x++) {
+            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
+        }
+
+        return $str;
+    }
+
+    private function curl($url)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
         $data = json_decode($json, true);
-        $count=count($data);
-        $str=$today.'游览车未检票数据';
-        for ($x=0; $x<$count; $x++){
-            $str = $str .'识别码'.$data[$x]['password'] . "  人数 ".$data[$x]['number']."\n";
-        }
-
-        return $str;
+        return $data;
     }
+
 
     public function Temp()
     {
