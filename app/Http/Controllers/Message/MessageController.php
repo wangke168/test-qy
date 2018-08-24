@@ -179,7 +179,7 @@ class MessageController extends Controller
         $count=count($data);
         $str=$today.'游览车未检票数据';
         for ($x=0; $x<$count; $x++){
-            $str = $str . $data[$x]['password'] . "\n";
+            $str = $str .'识别码'.$data[$x]['password'] . "  人数 ".$data[$x]['number']."\n";
         }
 
         return $str;
