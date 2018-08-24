@@ -165,7 +165,7 @@ class MessageController extends Controller
     }
 
 
-    private function CarMessage()
+    public function CarMessage()
     {
         $today = Carbon::now()->toDateString();
         $url = env('YDPT_URL', 'url');
