@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use EasyWeChat\Factory;
 
-class SendMessageControllerMessageController extends Controller
+class SendMessageController extends Controller
 {
     public $weObj;
     public $config;

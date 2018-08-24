@@ -25,7 +25,6 @@ Route::any('/message','Message\MessageController@index');
 
 Route::get('/sendrevenuemessage','Message\MessageController@SendMessage');
 
-
 Route::any('/sendmessage','SendMessage\SendMessageController@index');
 Route::get('/sendcarmessage','SendMessage\SendMessageController@SendCarMessage');
 
