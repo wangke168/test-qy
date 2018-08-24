@@ -151,7 +151,7 @@ class MessageController extends Controller
             $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
             $number=$number+$data[$x]['number'];
         }
-        $str=$str."总共".$count."笔订单，".$number.'人。';
+        $str=$str."\n总共".$count."笔订单，".$number.'人。';
         return $str;
     }
 
