@@ -146,9 +146,12 @@ class MessageController extends Controller
         $data = $this->curl($url);
         $count = count($data);
         $str = $today . "游览车未检票数据\n\n";
+        $number=0;
         for ($x = 0; $x < $count; $x++) {
             $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
+            $number=$number+$data[$x]['number'];
         }
+        $str=$str."总共".$count."笔订单，".$number.'人。';
         return $str;
     }
 
