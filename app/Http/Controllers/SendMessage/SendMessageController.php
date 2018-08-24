@@ -33,6 +33,9 @@ class SendMessageController extends Controller
         $this->weObj->server->push(function(){
             return 'Hello easywechat.';
         });
+        $response = $this->weObj->server->serve();
+
+        $response->send();
     }
 
     /**
