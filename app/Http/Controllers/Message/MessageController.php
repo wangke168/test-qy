@@ -131,6 +131,12 @@ class MessageController extends Controller
         return $data;
     }
 
+    /**
+     * 报表数据
+     * @param $StartDate
+     * @param $EndDate
+     * @return string
+     */
     public function message($StartDate, $EndDate)
     {
         $url = env('YDPT_URL', 'url');
@@ -155,6 +161,23 @@ class MessageController extends Controller
         $str = $str . $data['resultList'][2]['section'] . "\n";
         $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
+        return $str;
+    }
+
+
+    private function CarMessage()
+    {
+        $today = Carbon::now()->toDateString();
+        $url = env('YDPT_URL', 'url');
+        $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        $str=$today.'游览车未检票数据';
+        $str = $str . $data[0]['password'] . "\n";
         return $str;
     }
 

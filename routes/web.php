@@ -24,7 +24,7 @@ Route::any('/cardquery', 'Card\CardQueryController@index');
 Route::any('/message','Message\MessageController@index');
 
 Route::get('/sendmessage','Message\MessageController@SendMessage');
-
+Route::get('/sendcarmessage','Message\MessageController@CarMessage');
 
 //测试
 Route::get('/message/temp','Message\MessageController@Temp');
