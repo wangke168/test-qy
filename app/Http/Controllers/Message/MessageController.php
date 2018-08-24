@@ -10,6 +10,7 @@ class MessageController extends Controller
 {
     public $weObj;
     public $config;
+    public $token;
 
     public function __construct()
     {
@@ -21,6 +22,7 @@ class MessageController extends Controller
             'aes_key' => env('QY_WECHAT_MESSAGE_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj = Factory::work($this->config);
+        $token = $this->weObj->access_token->getToken();
 
     }
 
@@ -85,14 +87,27 @@ class MessageController extends Controller
 
     public function SendMessage()
     {
-        $accessToken = $this->weObj->access_token;
-        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串
+        /*$accessToken = $this->weObj->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
         $today = Carbon::now()->toDateString();
         $msg = $this->message($today, $today);
-        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $token['access_token'];
+        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
     }
+
+    public function SendCarMessage()
+    {
+ /*       $accessToken = $this->weObj->access_token;
+        $token = $accessToken->getToken(); // token 数组  token['access_token'] 字符串*/
+        $today = Carbon::now()->toDateString();
+        $msg = $this->message($today, $today);
+        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $this->curlPost($url, $data);
+    }
+
+
 
     private function curlPost($url, $data = "")
     {
