@@ -30,8 +30,13 @@ class SendMessageController extends Controller
 
     public function index()
     {
-        $this->weObj->server->push(function () {
-            return 'Hello easywechat.';
+        $this->weObj->server->push(function ($message) {
+            switch ($message['MsgType']) {
+                case 'text':
+                    return "其他功能陆续完善中";
+                    break;
+            }
+
         });
         $response = $this->weObj->server->serve();
 
