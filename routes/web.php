@@ -28,6 +28,8 @@ Route::get('/sendrevenuemessage','Message\MessageController@SendMessage');
 Route::any('/sendmessage','SendMessage\SendMessageController@index');
 Route::get('/sendcarmessage','SendMessage\SendMessageController@SendCarMessage');
 
+Route::any('/query','Query\QueryController@index');
+
 //测试
 Route::get('/message/temp','Message\MessageController@Temp');
 
