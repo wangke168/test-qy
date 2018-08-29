@@ -179,9 +179,9 @@ class TestController extends Controller
 
         echo $data['viewSpotName'].'<br>';
         echo $data['isUse'].'<br>';
-        echo $data['playedViewSpot']['playedViewSpotName'].'<br>';
-        echo $data['playedViewSpot']['playedTime'].'<br>';
-        echo $data['unPlayedViewSpot']['unPlayedViewSpotName'].'<br>';
+        echo $data['playedViewSpot'][0]['playedViewSpotName'].'<br>';
+        echo $data['playedViewSpot'][0]['playedTime'].'<br>';
+        echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
 //        return $data;
 /*
         if ($data <> 0) {

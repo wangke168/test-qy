@@ -37,4 +37,4 @@ Route::get('/temp','Test\TestController@temp');
 
 Route::any('/test', 'Test\TestController@index');
 
-Route::any('/testquery', 'Test\TestController@testquery');
+Route::any('/test/testquery', 'Test\TestController@testquery');
