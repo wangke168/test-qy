@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::any('/test', 'Test\TestController@index');
+
 
 Route::any('/jianpiao', 'JianPiao\JianPiaoController@index');
 
@@ -34,3 +34,7 @@ Route::any('/query','Query\QueryController@index');
 Route::get('/message/temp','Message\MessageController@Temp');
 
 Route::get('/temp','Test\TestController@temp');
+
+Route::any('/test', 'Test\TestController@index');
+
+Route::any('/testquery', 'Test\TestController@testquery');

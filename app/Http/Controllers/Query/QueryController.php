@@ -42,25 +42,18 @@ class QueryController extends Controller
     }
 
 //检票口
-    private function Check_tecket($tel)
+    private function Check_tecket($password)
     {
 
         $url = env('YDPT_URL', 'url');
-        $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $json = curl_exec($ch);
-        $data = json_decode($json, true);
-        $ticketcount = count($data['ticketorder']);
+        $url = $url ."SearechOrderUseDetails.aspx?password=".$password;
+        $data = $this->curl($url);
 
 
 
-        $i = 0;
 
         //    $str=$str."姓名：".$name."   电话：".$tel."\n";
-        if ($ticketcount <> 0) {
+        if ($data <> 0) {
 //            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
             $str = "您好，该客人的预订信息如下";
             for ($j = 0; $j < $ticketcount; $j++) {
@@ -94,5 +87,15 @@ class QueryController extends Controller
         $news = new News($items);
 
         return $str;
+    }
+    private function curl($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        return $data;
     }
 }
