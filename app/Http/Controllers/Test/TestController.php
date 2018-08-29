@@ -174,16 +174,22 @@ class TestController extends Controller
     public function testquery()
     {
         $url = env('YDPT_URL', 'url');
-        $url = $url . "SearechOrderUseDetails.aspx?password=962076";
+        $url = $url . "SearechOrderUseDetails.aspx?password=962076sd";
         $data = $this->curl($url);
+        if ($data['viewSpotName']==null)
+        {
+            echo "sadasds";
+        }
+        else{
+            echo $data['viewSpotName'].'<br>';
+            echo $data['isUse'].'<br>';
+            $count = count($data['playedViewSpot']);
+            echo $count.'<br>';
+            echo $data['playedViewSpot'][0]['playedViewSpotName'].'<br>';
+            echo $data['playedViewSpot'][0]['playedTime'].'<br>';
+            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
+        }
 
-        echo $data['viewSpotName'].'<br>';
-        echo $data['isUse'].'<br>';
-        $count = count($data['playedViewSpot']);
-        echo $count.'<br>';
-        echo $data['playedViewSpot'][0]['playedViewSpotName'].'<br>';
-        echo $data['playedViewSpot'][0]['playedTime'].'<br>';
-        echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
 //        return $data;
 /*
         if ($data <> 0) {
