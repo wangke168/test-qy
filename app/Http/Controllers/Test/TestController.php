@@ -174,21 +174,25 @@ class TestController extends Controller
     public function testquery()
     {
         $url = env('YDPT_URL', 'url');
-        $url = $url . "SearechOrderUseDetails.aspx?password=962076sd";
+        $url = $url . "SearechOrderUseDetails.aspx?password=962076";
         $data = $this->curl($url);
         if ($data['viewSpotName']==null)
         {
-            echo "sadasds";
+            $str= "该识别码七天内无订单";
         }
         else{
-            echo $data['viewSpotName'].'<br>';
-            echo $data['isUse'].'<br>';
+            $str = "门票种类：" . $data['viewSpotName'];
+
+            $str = $str."\n使用情况：" . $data['isUse'];
+
             $count = count($data['playedViewSpot']);
-            echo $count.'<br>';
-            echo $data['playedViewSpot'][0]['playedViewSpotName'].'<br>';
-            echo $data['playedViewSpot'][0]['playedTime'].'<br>';
-            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
+            for ($x = 0; $x < $count; $x++) {
+                $str=$str."\n已检景点".$data['playedViewSpot'][0]['playedViewSpotName'];
+                $str=$str."\n检票时间".$data['playedViewSpot'][0]['playedTime'];
+            }
+//            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
         }
+        return $str;
 
 //        return $data;
 /*
