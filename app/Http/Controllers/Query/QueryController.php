@@ -56,12 +56,12 @@ class QueryController extends Controller
         else{
             $str = "门票种类：" . $data['viewSpotName'];
 
-            $str = $str."\n使用情况：" . $data['isUse'];
+            $str = $str."\n\n使用情况：" . $data['isUse'];
 
             $count = count($data['playedViewSpot']);
             for ($x = 0; $x < $count; $x++) {
-                $str=$str."\n已检景点".$data['playedViewSpot'][$x]['playedViewSpotName'];
-                $str=$str."\n检票时间".$data['playedViewSpot'][$x]['playedTime'];
+                $str=$str."\n\n已检景点:".$data['playedViewSpot'][$x]['playedViewSpotName'];
+                $str=$str."\n\n检票时间:".$data['playedViewSpot'][$x]['playedTime'];
             }
 //            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
         }
