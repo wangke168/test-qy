@@ -49,45 +49,25 @@ class QueryController extends Controller
         $url = $url ."SearechOrderUseDetails.aspx?password=".$password;
         $data = $this->curl($url);
 
-
-
-
-        //    $str=$str."姓名：".$name."   电话：".$tel."\n";
-        if ($data <> 0) {
-//            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
-            $str = "您好，该客人的预订信息如下";
-            for ($j = 0; $j < $ticketcount; $j++) {
-                $i = $i + 1;
-                $str = $str . "\n订单" . $i;
-                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
-                $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
-                $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
-                $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
-                /* if ($data['ticketorder'][$j]['ticket'] == '三大点+梦幻谷' || $data['ticketorder'][$j]['ticket'] == '网络联票+梦幻谷') {
-                     $str = $str . "\n注意：该票种需要身份证检票";
-                 } else {*/
-                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
-//                }
-                $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
-            }
-        } else {
-            $str = "该手机号下无门票订单";
+        if ($data['viewSpotName']==null)
+        {
+            $str= "该识别码七天内无订单";
         }
+        else{
+            $str = "门票种类：" . $data['viewSpotName'];
 
+            $str = $str."\n使用情况：" . $data['isUse'];
 
-        $items = [
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-            ]),
-
-        ];
-        $news = new News($items);
-
+            $count = count($data['playedViewSpot']);
+            for ($x = 0; $x < $count; $x++) {
+                $str=$str."\n已检景点".$data['playedViewSpot'][0]['playedViewSpotName'];
+                $str=$str."\n检票时间".$data['playedViewSpot'][0]['playedTime'];
+            }
+//            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
+        }
         return $str;
     }
+
     private function curl($url)
     {
         $ch = curl_init();
