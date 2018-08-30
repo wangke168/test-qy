@@ -30,7 +30,7 @@ class QueryController extends Controller
             switch ($message['MsgType']) {
                 case 'text':
                     $news=$this->Check_tecket($message['Content']);
-                    return "dsadsada";
+                    return $news;
                     break;
                 default:
                     return '收到其它消息';
