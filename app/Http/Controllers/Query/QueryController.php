@@ -60,8 +60,8 @@ class QueryController extends Controller
 
             $count = count($data['playedViewSpot']);
             for ($x = 0; $x < $count; $x++) {
-                $str=$str."\n已检景点".$data['playedViewSpot'][0]['playedViewSpotName'];
-                $str=$str."\n检票时间".$data['playedViewSpot'][0]['playedTime'];
+                $str=$str."\n已检景点".$data['playedViewSpot'][$x]['playedViewSpotName'];
+                $str=$str."\n检票时间".$data['playedViewSpot'][$x]['playedTime'];
             }
 //            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
         }
