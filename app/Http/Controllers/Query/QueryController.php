@@ -56,7 +56,16 @@ class QueryController extends Controller
         else{
             $str = "门票种类：" . $data['viewSpotName'];
 
-            $str = $str."\n\n使用情况：" . $data['isUse'];
+            if ($data['isUse'])
+            {
+                $isUse="已使用";
+            }
+            else
+            {
+                $isUse="未使用";
+            }
+
+            $str = $str."\n\n使用情况：" . $isUse;
 
             $count = count($data['playedViewSpot']);
             for ($x = 0; $x < $count; $x++) {
