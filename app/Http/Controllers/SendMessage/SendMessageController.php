@@ -12,7 +12,7 @@ class SendMessageController extends Controller
     public $config;
     public $token;
     public $getCarMessage;
-
+    public $client;
     public function __construct()
     {
         $this->config = [
@@ -25,7 +25,7 @@ class SendMessageController extends Controller
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
         $this->getCarMessage = env('Get_CarMessage', 'hd_wangke');;
-
+        $this->client = new \GuzzleHttp\Client();
     }
 
     public function index()
@@ -65,7 +65,7 @@ class SendMessageController extends Controller
         $today = Carbon::now()->toDateString();
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
-        $data = $this->curl($url);
+        $data = $this->client->request('GET', $url);
         $count = count($data);
         $str = $today . "游览车未检票数据\n\n";
         $number = 0;
