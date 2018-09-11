@@ -45,14 +45,18 @@ class JianPiaoController extends Controller
     private function Check_tecket($tel)
     {
 
+        $client = new \GuzzleHttp\Client();
+
+
         $url = env('YDPT_URL', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
-        $ch = curl_init();
+        $data = $client->request('GET', $url);
+        /*$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
         $json = curl_exec($ch);
-        $data = json_decode($json, true);
+        $data = json_decode($json, true);*/
         $ticketcount = count($data['ticketorder']);
 
 
