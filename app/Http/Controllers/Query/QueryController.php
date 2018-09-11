@@ -46,7 +46,7 @@ class QueryController extends Controller
 //检票口
     private function Check_tecket($password)
     {
-        $client = new \GuzzleHttp\Client();
+
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearechOrderUseDetails.aspx?password=" . $password;
         $data = $this->curl($url);
