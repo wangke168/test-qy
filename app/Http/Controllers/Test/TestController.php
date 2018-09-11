@@ -10,7 +10,7 @@ use EasyWeChat\Work;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
-
+use Overtrue\Http\Client;
 class TestController extends Controller
 {
     public $weObj;
@@ -53,33 +53,8 @@ class TestController extends Controller
         return $str;
     }
 
-    public function temp()
-    {
-        echo date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m', time()) . '-01 00:00:00')));
 
-    }
 
-    private function curlPost($url, $data = "")
-    {
-        $ch = curl_init();
-        $opt = array(
-            CURLOPT_URL => $url,
-            CURLOPT_HEADER => 0,
-            CURLOPT_POST => 1,
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_TIMEOUT => 20
-        );
-        $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
-        if ($ssl) {
-            $opt[CURLOPT_SSL_VERIFYHOST] = 2;
-            $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
-        }
-        curl_setopt_array($ch, $opt);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
-    }
 
     public function index()
     {
@@ -117,60 +92,6 @@ class TestController extends Controller
         return $response;
     }
 
-//检票口
-    private function Check_tecket($tel)
-    {
-        $url = env('QY_WECHAT_JIANPIAO_URL', 'url');
-        $url = $url . $tel;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $json = curl_exec($ch);
-        $data = json_decode($json, true);
-        $ticketcount = count($data['ticketorder']);
-        $inclusivecount = count($data['inclusiveorder']);
-        $hotelcount = count($data['hotelorder']);
-
-
-        $i = 0;
-
-        //    $str=$str."姓名：".$name."   电话：".$tel."\n";
-        if ($ticketcount <> 0) {
-//            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
-            $str = "您好，该客人的预订信息如下";
-            for ($j = 0; $j < $ticketcount; $j++) {
-                $i = $i + 1;
-                $str = $str . "\n订单" . $i;
-                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
-                $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
-                $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
-                $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
-
-                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'];
-
-                $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
-            }
-        } else {
-            $str = "该手机号下无门票订单";
-        }
-
-
-        $items = [
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-
-            ]),
-
-        ];
-        $news = new News($items);
-
-        return $str;
-    }
-
     public function testquery()
     {
         $url = env('YDPT_URL', 'url');
@@ -194,40 +115,6 @@ class TestController extends Controller
         }
         return $str;
 
-//        return $data;
-/*
-        if ($data <> 0) {
-
-            $str = "您好，该客人的预订信息如下";
-            for ($j = 0; $j < $ticketcount; $j++) {
-                $i = $i + 1;
-                $str = $str . "\n订单" . $i;
-                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
-                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
-                $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
-                $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
-                $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
-
-                $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'];
-
-                $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
-            }
-        } else {
-            $str = "该手机号下无门票订单";
-        }
-
-
-        $items = [
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
-            ]),
-
-        ];
-        $news = new News($items);
-
-        return $str;*/
     }
 
     private function curl($url)
@@ -239,5 +126,15 @@ class TestController extends Controller
         $json = curl_exec($ch);
         $data = json_decode($json, true);
         return $data;
+    }
+
+    public function test1()
+    {
+        $client = Client::create();
+
+        $url ="http://ydpt.hdyuanmingxinyuan.com/SearechOrderUseDetails.aspx?password=284920";
+        $response = $client->get($url);
+
+        var_dump($response);
     }
 }

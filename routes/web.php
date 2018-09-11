@@ -28,6 +28,7 @@ Route::get('/sendrevenuemessage','Message\MessageController@SendMessage');
 Route::any('/sendmessage','SendMessage\SendMessageController@index');
 Route::get('/sendcarmessage','SendMessage\SendMessageController@SendCarMessage');
 
+
 Route::any('/query','Query\QueryController@index');
 
 //测试
@@ -38,3 +39,5 @@ Route::get('/temp','Test\TestController@temp');
 Route::any('/test', 'Test\TestController@index');
 
 Route::any('/test/testquery', 'Test\TestController@testquery');
+
+Route::get('/test/test1', 'Test\TestController@test1');
