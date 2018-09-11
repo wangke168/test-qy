@@ -11,6 +11,7 @@ use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 use Overtrue\Http\Client;
+use Overtrue\Http\Config;
 class TestController extends Controller
 {
     public $weObj;
@@ -130,11 +131,26 @@ class TestController extends Controller
 
     public function test1()
     {
-        $client = Client::create();
 
-        $url ="http://ydpt.hdyuanmingxinyuan.com/SearechOrderUseDetails.aspx?password=284920";
+
+
+
+
+
+/*        $client = Client::create();
+        $url ="http://ydpt.hdyuanmingxinyuan.com/searchorder_json.aspx?name=Anonymous&phone=13605330095";
         $response = $client->get($url);
 
-        var_dump($response);
+        return($response);*/
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', 'http://ydpt.hdyuanmingxinyuan.com/searchorder_json.aspx?name=Anonymous&phone=13605330095');
+
+// 'application/json; charset=utf8'
+//        echo $res->getBody();
+// '{"id": 1420053, "name": "guzzle", ...}'
+
+// Send an asynchronous request.
+
     }
 }
