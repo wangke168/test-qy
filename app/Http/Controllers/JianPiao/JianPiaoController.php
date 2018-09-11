@@ -10,7 +10,7 @@ class JianPiaoController extends Controller
 {
     public $weObj;
     public $config;
-    public $client;
+    
     public function __construct()
     {
         $this->config=[
@@ -21,7 +21,6 @@ class JianPiaoController extends Controller
             'aes_key' => env('QY_WECHAT_JIANPIAO_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj=Factory::work($this->config);
-        $this->client = new \GuzzleHttp\Client();
     }
 
     public function index()
@@ -46,9 +45,10 @@ class JianPiaoController extends Controller
 //检票口
     private function Check_tecket($tel)
     {
+        $client = new \GuzzleHttp\Client();
         $url = env('YDPT_URL', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
-        $data = $this->client->request('GET', $url);
+        $data = $client->request('GET', $url);
         $ticketcount = count($data['ticketorder']);
 
         $i = 0;
