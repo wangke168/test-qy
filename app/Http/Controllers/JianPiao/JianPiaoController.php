@@ -48,8 +48,8 @@ class JianPiaoController extends Controller
     {
         $url = env('YDPT_URL', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
-        $data = $this->client->request('GET', $url)->getBody();
-//        $data = json_decode($json, true);
+        $json = $this->client->request('GET', $url)->getBody();
+        $data = json_decode($json, true);
 //        $data =
         $ticketcount = count($data['ticketorder']);
 
