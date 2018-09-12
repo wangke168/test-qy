@@ -12,7 +12,7 @@ class SendMessageController extends Controller
     public $config;
     public $token;
     public $getCarMessage;
-    public $client;
+
     public function __construct()
     {
         $this->config = [
@@ -25,7 +25,7 @@ class SendMessageController extends Controller
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
         $this->getCarMessage = env('Get_CarMessage', 'hd_wangke');;
-        $this->client = new \GuzzleHttp\Client();
+
     }
 
     public function index()
@@ -52,7 +52,7 @@ class SendMessageController extends Controller
         $msg = $this->CarMessage();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"$this->getCarMessage\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $this->client->request('POST',$url,$data);
+        $this->curlPost($url, $data);
     }
 
 
@@ -65,8 +65,7 @@ class SendMessageController extends Controller
         $today = Carbon::now()->toDateString();
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
-        $json = $this->client->request('GET', $url)->getBody();
-        $data = json_decode($json, true);
+        $data = $this->curl($url);
         $count = count($data);
         $str = $today . "游览车未检票数据\n\n";
         $number = 0;
@@ -78,9 +77,18 @@ class SendMessageController extends Controller
         return $str;
     }
 
+    private function curl($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        $json = curl_exec($ch);
+        $data = json_decode($json, true);
+        return $data;
+    }
 
-
-  /*  private function curlPost($url, $data = "")
+    private function curlPost($url, $data = "")
     {
         $ch = curl_init();
         $opt = array(
@@ -100,5 +108,5 @@ class SendMessageController extends Controller
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
-    }*/
+    }
 }
