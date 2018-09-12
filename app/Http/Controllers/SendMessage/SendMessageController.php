@@ -12,6 +12,7 @@ class SendMessageController extends Controller
     public $config;
     public $token;
     public $getCarMessage;
+    public $client;
 
     public function __construct()
     {
@@ -25,7 +26,7 @@ class SendMessageController extends Controller
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
         $this->getCarMessage = env('Get_CarMessage', 'hd_wangke');;
-
+        $this->client = new \GuzzleHttp\Client();
     }
 
     public function index()
@@ -52,7 +53,8 @@ class SendMessageController extends Controller
         $msg = $this->CarMessage();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"$this->getCarMessage\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $this->curlPost($url, $data);
+//        $this->curlPost($url, $data);
+        $this->client->request('POST', $url, $data);
     }
 
 
