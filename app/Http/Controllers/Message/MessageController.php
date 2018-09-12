@@ -74,7 +74,7 @@ class MessageController extends Controller
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 case "7":
-                                    $this->SendCarMessage();
+                                    $this->client->request('GET','https://qy.hdymxy.com/sendcarmessage');
                                     break;
                                 default:
                                     break;
