@@ -13,6 +13,7 @@ class MessageController extends Controller
     public $token;
     public $getMessage;
     public $client;
+
     public function __construct()
     {
         $this->config = [
@@ -72,6 +73,9 @@ class MessageController extends Controller
                                     $EndDate = Carbon::now()->toDateString();
                                     return $this->message($StartDate, $EndDate);
                                     break;
+                                case "7":
+                                    $this->SendCarMessage();
+                                    break;
                                 default:
                                     break;
                             }
@@ -94,7 +98,7 @@ class MessageController extends Controller
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
 //        $this->curlPost($url, $data);
-        $this->client->request('POST',$url,$data);
+        $this->client->request('POST', $url, $data);
     }
 
 
@@ -127,30 +131,64 @@ class MessageController extends Controller
         return $str;
     }
 
-    private function curlPost($url, $data = "")
-    {
-        $ch = curl_init();
-        $opt = array(
-            CURLOPT_URL => $url,
-            CURLOPT_HEADER => 0,
-            CURLOPT_POST => 1,
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_TIMEOUT => 20
-        );
-        $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
-        if ($ssl) {
-            $opt[CURLOPT_SSL_VERIFYHOST] = 2;
-            $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
-        }
-        curl_setopt_array($ch, $opt);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
-    }
+    /*
+        private function curlPost($url, $data = "")
+        {
+            $ch = curl_init();
+            $opt = array(
+                CURLOPT_URL => $url,
+                CURLOPT_HEADER => 0,
+                CURLOPT_POST => 1,
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_TIMEOUT => 20
+            );
+            $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
+            if ($ssl) {
+                $opt[CURLOPT_SSL_VERIFYHOST] = 2;
+                $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
+            }
+            curl_setopt_array($ch, $opt);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            return $data;
+        }*/
 
     public function Temp()
     {
         var_dump($this->weObj->menu->get());
+    }
+
+    private function SendCarMessage()
+    {
+        $SendCarMessage_config = [
+            'corp_id' => env('QY_WECHAT_APPID', 'corp_id'),
+            'agent_id' => env('QY_WECHAT_SENDMESSAGE_AGENTID', 'agent_id'),
+            'secret' => env('QY_WECHAT_SENDMESSAGE_APPSECRET', 'secret'),
+            'token' => env('QY_WECHAT_SENDMESSAGE_TOEKN', 'token'),
+            'aes_key' => env('QY_WECHAT_SENDMESSAGE_ENCODINGAESKEY', 'aes_key'),
+        ];
+        $SendCarMessage_weObj = Factory::work($SendCarMessage_config);
+        $SendCarMessage_token = $SendCarMessage_weObj->access_token->getToken();
+        $SendCarMessage_getCarMessage = env('Get_CarMessage', 'hd_wangke');;
+//        $this->client = new \GuzzleHttp\Client();
+        $today = Carbon::now()->toDateString();
+        $url = env('YDPT_URL', 'url');
+        $url = $url . "SearchNotCheckedTouristcarTiceket.aspx";
+        $json = $this->client->request('GET', $url)->getBody();
+        $data = json_decode($json, true);
+        $count = count($data);
+        $str = $today . "游览车未检票数据\n\n";
+        $number = 0;
+        for ($x = 0; $x < $count; $x++) {
+            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
+            $number = $number + $data[$x]['number'];
+        }
+        $msg = $str . "\n总共" . $count . "笔订单，" . $number . '人。';
+
+//        $msg = $this->CarMessage();
+        $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $SendCarMessage_token['access_token'];
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $this->client->request('POST', $url, $data);
     }
 }

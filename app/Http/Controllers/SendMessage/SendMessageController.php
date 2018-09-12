@@ -52,7 +52,7 @@ class SendMessageController extends Controller
         $msg = $this->CarMessage();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
         $data = "{\"touser\":\"$this->getCarMessage\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $this->curlPost($url, $data);
+        $this->client->request('POST',$url,$data);
     }
 
 
@@ -80,7 +80,7 @@ class SendMessageController extends Controller
 
 
 
-    private function curlPost($url, $data = "")
+  /*  private function curlPost($url, $data = "")
     {
         $ch = curl_init();
         $opt = array(
@@ -100,5 +100,5 @@ class SendMessageController extends Controller
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
-    }
+    }*/
 }
