@@ -12,6 +12,7 @@ use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 use Overtrue\Http\Client;
 use Overtrue\Http\Config;
+
 class TestController extends Controller
 {
     public $weObj;
@@ -55,8 +56,6 @@ class TestController extends Controller
     }
 
 
-
-
     public function index()
     {
 
@@ -98,19 +97,17 @@ class TestController extends Controller
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearechOrderUseDetails.aspx?password=962076";
         $data = $this->curl($url);
-        if ($data['viewSpotName']==null)
-        {
-            $str= "该识别码七天内无订单";
-        }
-        else{
+        if ($data['viewSpotName'] == null) {
+            $str = "该识别码七天内无订单";
+        } else {
             $str = "门票种类：" . $data['viewSpotName'];
 
-            $str = $str."\n使用情况：" . $data['isUse'];
+            $str = $str . "\n使用情况：" . $data['isUse'];
 
             $count = count($data['playedViewSpot']);
             for ($x = 0; $x < $count; $x++) {
-                $str=$str."\n已检景点".$data['playedViewSpot'][0]['playedViewSpotName'];
-                $str=$str."\n检票时间".$data['playedViewSpot'][0]['playedTime'];
+                $str = $str . "\n已检景点" . $data['playedViewSpot'][0]['playedViewSpotName'];
+                $str = $str . "\n检票时间" . $data['playedViewSpot'][0]['playedTime'];
             }
 //            echo $data['unPlayedViewSpot'][0]['unPlayedViewSpotName'].'<br>';
         }
@@ -131,26 +128,16 @@ class TestController extends Controller
 
     public function test1()
     {
-
-
-
-
-
-
-/*        $client = Client::create();
-        $url ="http://ydpt.hdyuanmingxinyuan.com/searchorder_json.aspx?name=Anonymous&phone=13605330095";
-        $response = $client->get($url);
-
-        return($response);*/
-
-        $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', 'http://ydpt.hdyuanmingxinyuan.com/searchorder_json.aspx?name=Anonymous&phone=13605330095');
-
-// 'application/json; charset=utf8'
-//        echo $res->getBody();
-// '{"id": 1420053, "name": "guzzle", ...}'
-
-// Send an asynchronous request.
-
+        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"msg\"},\"safe\":0}";
+        echo $data;
+        echo "<br/>";
+        $new_data = array(
+            "touer" => "hd_wangke",
+            "msgtype" => "text",
+            "agentid" => 1000009,
+            "text" => (["content" => "msg"]),
+            "safe" => 0
+        );
+        echo($new_data);
     }
 }
