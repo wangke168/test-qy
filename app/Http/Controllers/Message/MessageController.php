@@ -12,7 +12,7 @@ class MessageController extends Controller
     public $config;
     public $token;
     public $getMessage;
-
+    public $client;
     public function __construct()
     {
         $this->config = [
@@ -25,6 +25,7 @@ class MessageController extends Controller
         $this->weObj = Factory::work($this->config);
         $this->token = $this->weObj->access_token->getToken();
         $this->getMessage = env('Get_Message', 'hd_wangke');;
+        $this->client = new \GuzzleHttp\Client();
     }
 
     public function index()
@@ -106,7 +107,8 @@ class MessageController extends Controller
     {
         $url = env('YDPT_URL', 'url');
         $url = $url . "CheckSectionsTurnover.aspx?startdate=" . $StartDate . "&enddate=" . $EndDate;
-        $data = $this->curl($url);
+        $json = $this->client->request('GET', $url)->getBody();
+        $data = json_decode($json, true);
         if ($StartDate == $EndDate) {
             $str = $StartDate . "数据如下\n";
         } else {
@@ -122,18 +124,6 @@ class MessageController extends Controller
         $str = $str . "营收:" . round($data['resultList'][2]['turnover'], 2) . "元\n";
         $str = $str . "人次:" . $data['resultList'][2]['personTime'] . "\n\n";
         return $str;
-    }
-
-
-    private function curl($url)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $json = curl_exec($ch);
-        $data = json_decode($json, true);
-        return $data;
     }
 
     private function curlPost($url, $data = "")

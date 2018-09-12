@@ -11,7 +11,7 @@ class QueryController extends Controller
 {
     public $weObj;
     public $config;
-
+    public $client;
     public function __construct()
     {
         $this->config = [
@@ -22,6 +22,7 @@ class QueryController extends Controller
             'aes_key' => env('QY_WECHAT_QUERY_ENCODINGAESKEY', 'aes_key'),
         ];
         $this->weObj = Factory::work($this->config);
+        $this->client = new \GuzzleHttp\Client();
     }
 
     public function index()
@@ -49,7 +50,8 @@ class QueryController extends Controller
 
         $url = env('YDPT_URL', 'url');
         $url = $url . "SearechOrderUseDetails.aspx?password=" . $password;
-        $data = $this->curl($url);
+        $json = $this->client->request('GET', $url)->getBody();
+        $data = json_decode($json, true);
 
         if ($data['viewSpotName'] == null) {
             $str = "该识别码七天内无订单";
@@ -68,14 +70,4 @@ class QueryController extends Controller
         return $str;
     }
 
-    private function curl($url)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $json = curl_exec($ch);
-        $data = json_decode($json, true);
-        return $data;
-    }
 }
