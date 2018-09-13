@@ -128,8 +128,9 @@ class TestController extends Controller
 
     public function test1()
     {
+        $asas=new Text('asd');
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"msg\"},\"safe\":0}";
-        echo $data;
+        var_dump($data);
         echo "<br/>";
         $new_data = array(
             "touer" => "hd_wangke",
@@ -138,6 +139,6 @@ class TestController extends Controller
             "text" => (["content" => "msg"]),
             "safe" => 0
         );
-        echo($new_data);
+        var_dump($new_data);
     }
 }
