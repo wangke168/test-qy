@@ -132,13 +132,13 @@ class TestController extends Controller
         $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"msg\"},\"safe\":0}";
         var_dump($data);
         echo "<br/>";
-        $new_data = array(
+        $new_data = [
             "touer" => "hd_wangke",
             "msgtype" => "text",
             "agentid" => 1000009,
-            "text" => (["content" => "msg"]),
+            "text" => ["content" => "msg"],
             "safe" => 0
-        );
-        var_dump($new_data);
+        ];
+        echo ($new_data);
     }
 }
