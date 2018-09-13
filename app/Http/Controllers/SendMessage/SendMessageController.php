@@ -51,7 +51,7 @@ class SendMessageController extends Controller
     {
         $msg = $this->CarMessage();
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
-        $data = "{\"touser\":\"hd_wangke\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+        $data = "{\"touser\":\"$this->getCarMessage\",\"msgtype\":\"text\",\"agentid\":1000011,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
         $this->curlPost($url, $data);
 //        $this->client->request('POST', $url, $data);
     }
