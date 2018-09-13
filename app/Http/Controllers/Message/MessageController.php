@@ -96,14 +96,14 @@ class MessageController extends Controller
         $today = Carbon::now()->toDateString();
         $msg = $this->Message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
-//        $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $data = array(
+        $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+ /*       $data = array(
             "touer" => $this->getMessage,
             "msgtype" => "text",
             "agentid" => 1000009,
             "text" => (["content" => $msg]),
             "safe" => 0
-        );
+        );*/
 
         //        $this->curlPost($url, $data);
                 $this->client->request('POST', $url, $data);
