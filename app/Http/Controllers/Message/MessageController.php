@@ -74,7 +74,7 @@ class MessageController extends Controller
                                     return $this->message($StartDate, $EndDate);
                                     break;
                                 case "7":
-                                    $this->client->request('GET','https://qy.hdymxy.com/sendcarmessage');
+                                    $this->client->request('GET', 'https://qy.hdymxy.com/sendcarmessage');
                                     break;
                                 default:
                                     break;
@@ -91,24 +91,34 @@ class MessageController extends Controller
         return $response;
     }
 
+    /*    public function SendMessage()
+        {
+            $today = Carbon::now()->toDateString();
+            $msg = $this->Message($today, $today);
+            $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
+            $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
+            $this->curlPost($url, $data);
+        }*/
+
     public function SendMessage()
     {
         $today = Carbon::now()->toDateString();
         $msg = $this->Message($today, $today);
         $url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" . $this->token['access_token'];
-//        $data = "{\"touser\":\"$this->getMessage\",\"msgtype\":\"text\",\"agentid\":1000009,\"text\":{\"content\":\"$msg\"},\"safe\":0}";
-        $data = [
+        $params = [
             "touer" => $this->getMessage,
             "msgtype" => "text",
             "agentid" => 1000009,
             "text" => ["content" => $msg],
             "safe" => 0
         ];
-
-        //        $this->curlPost($url, $data);
-                $this->client->request('POST', $url, $data);
+        $options = json_encode($params, JSON_UNESCAPED_UNICODE);
+        $data = [
+            'body' => $options,
+            'headers' => ['content-type' => 'application/json']
+        ];
+        $this->client->request('POST', $url, $data);
     }
-
 
     /**
      * 报表数据
@@ -139,28 +149,28 @@ class MessageController extends Controller
         return $str;
     }
 
-    /*
-        private function curlPost($url, $data = "")
-        {
-            $ch = curl_init();
-            $opt = array(
-                CURLOPT_URL => $url,
-                CURLOPT_HEADER => 0,
-                CURLOPT_POST => 1,
-                CURLOPT_POSTFIELDS => $data,
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_TIMEOUT => 20
-            );
-            $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
-            if ($ssl) {
-                $opt[CURLOPT_SSL_VERIFYHOST] = 2;
-                $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
-            }
-            curl_setopt_array($ch, $opt);
-            $data = curl_exec($ch);
-            curl_close($ch);
-            return $data;
-        }*/
+
+    private function curlPost($url, $data = "")
+    {
+        $ch = curl_init();
+        $opt = array(
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => 0,
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_TIMEOUT => 20
+        );
+        $ssl = substr($url, 0, 8) == "https://" ? TRUE : FALSE;
+        if ($ssl) {
+            $opt[CURLOPT_SSL_VERIFYHOST] = 2;
+            $opt[CURLOPT_SSL_VERIFYPEER] = FALSE;
+        }
+        curl_setopt_array($ch, $opt);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
 
     public function Temp()
     {
