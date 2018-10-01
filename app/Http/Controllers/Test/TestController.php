@@ -151,10 +151,10 @@ class TestController extends Controller
         $str = $today . "游览车未检票数据\n\n";
         $number = 0;
         for ($x = 0; $x < $count; $x++) {
-            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "\n";
+            $str = $str . '识别码' . $data[$x]['password'] . "  人数 " . $data[$x]['number'] . "<br>";
             $number = $number + $data[$x]['number'];
         }
-        $str = $str . "\n总共" . $count . "笔订单，" . $number . '人。';
+        $str = $str . "<br>总共" . $count . "笔订单，" . $number . '人。';
         return $str;
     }
 
