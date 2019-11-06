@@ -146,21 +146,6 @@ class JianPiaoController extends Controller
         }
         /*-------------------输出给html页面结束-----------------------*/
 
-
-      /*
-        $str_detail =str_replace("\n","<br>",$str);
-        $items = [
-
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'http://weix.hengdianworld.com/jianpiao/detail?str='.$str_detail,
-            ]),
-
-        ];
-        $news = new News($items);
-
-        return $str;*/
     }
 
 
