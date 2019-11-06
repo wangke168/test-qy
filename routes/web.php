@@ -43,3 +43,7 @@ Route::any('/test/testquery', 'Test\TestController@testquery');
 Route::get('/test/test1', 'Test\TestController@test1');
 
 Route::get('/test/test2', 'Test\TestController@test2');
+
+
+//检票详情
+Route::get('/jianpiao/detail','JianPiao\JianPiaoController@detail');

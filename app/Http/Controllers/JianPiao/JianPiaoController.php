@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
+use Illuminate\Http\Request;
+
 class JianPiaoController extends Controller
 {
     public $weObj;
@@ -41,12 +43,87 @@ class JianPiaoController extends Controller
         });
         $response = $this->weObj->server->serve();
         return $response;
+
+//        echo($this->Check_ticket("15074704357"));
     }
 
-//检票口
-    private function Check_tecket($tel)
+
+    private function Check_ticket($tel)
     {
-        $url = env('YDPT_URL', 'url');
+        if ($this->Check_ticket_new($tel))
+        {
+            $str= $this->Check_ticket_new($tel);
+        }
+        elseif($this->Check_Tiket_Old($tel)){
+            $str= $this->Check_Tiket_Old($tel);
+        }
+        else{
+            $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
+        }
+        return $str;
+    }
+
+    /**
+     * 新系统订单查询
+     * @param $tel
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function Check_Ticket_New($tel)
+    {
+        $url = env('CHECK_ORDER_URL_NEW', 'url');
+        $url = $url ."WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";//        $url="http://192.168.100.206:8089/Order/api/Order/WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";
+        $json = $this->client->request('GET', $url)->getBody();
+        $data = json_decode($json, true);
+        $ticketcount = count($data['ticketorder']);
+        $i = 0;//        return $data['ticketorder'][0]['name'];
+        if ($ticketcount <> 0) {
+            $str = "您好，该客人的预订信息如下\n注意，若是联票或活动门票仍然需要身份证检票\n";
+            for ($j = 0; $j < $ticketcount; $j++) {
+                $i = $i + 1;
+                $str = $str . "\n订单" . $i;
+                $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
+                $str = $str . "\n订单号:" . $data['ticketorder'][$j]['sellid'];
+                $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
+                $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
+                $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
+                if ($data['ticketorder'][$j]['flag']=='全部退单')
+                {
+                    $str = $str . "\n订单状态:已取消\n";
+                }
+                else {
+                    $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'];
+                    $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] . "\n";
+                }
+            }
+        } else {
+            $str = null;
+        }
+        $str =str_replace("\n","<br>",$str);
+        $items = [
+
+            new NewsItem([
+                'title' => '查询结果',
+                'description' => $str,
+                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str,
+            ]),
+
+        ];
+        $news = new News($items);
+
+        return $news;
+    }
+
+
+    /**
+     * 老系统订单查询
+     * @param $tel
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function Check_Tiket_Old($tel)
+    {
+        $url = env('CHECK_ORDER_URL_OLD', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
         $json = $this->client->request('GET', $url)->getBody();
         $data = json_decode($json, true);
@@ -56,8 +133,7 @@ class JianPiaoController extends Controller
         $i = 0;
 
         if ($ticketcount <> 0) {
-//            $str = "您好，该客人的预订信息如下\n注意，若是联票+梦幻谷或者三点+梦幻谷的门票仍然需要身份证检票\n";
-            $str = "您好，该客人的预订信息如下";
+            $str = "您好，该客人的预订信息如下\n注意，若是联票或活动门票仍然需要身份证检票\n";
             for ($j = 0; $j < $ticketcount; $j++) {
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
@@ -66,28 +142,29 @@ class JianPiaoController extends Controller
                 $str = $str . "\n预达日期:" . $data['ticketorder'][$j]['date2'];
                 $str = $str . "\n预购景点:" . $data['ticketorder'][$j]['ticket'];
                 $str = $str . "\n人数:" . $data['ticketorder'][$j]['numbers'];
-                /* if ($data['ticketorder'][$j]['ticket'] == '三大点+梦幻谷' || $data['ticketorder'][$j]['ticket'] == '网络联票+梦幻谷') {
-                     $str = $str . "\n注意：该票种需要身份证检票";
-                 } else {*/
                 $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
-//                }
                 $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
             }
         } else {
-            $str = "该手机号下无门票订单";
+            $str = null;
         }
-
-
+        $str =str_replace("\n","<br>",$str);
         $items = [
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
-                'url' => 'https://wechat.hdyuanmingxinyuan.com/article/detail?id=1482',
+                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str,
             ]),
 
         ];
         $news = new News($items);
 
+        return $news;
+    }
+
+    public function detail(Request $request)
+    {
+        $str=$request->input("str");
         return $str;
     }
 }
