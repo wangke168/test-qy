@@ -125,21 +125,42 @@ class JianPiaoController extends Controller
                 }
             }
         } else {
-            $str = null;
+            return null;
         }
+        /*-------------------输出给html页面开始-----------------------*/
+        if ($type==2){
+            $str_detail = str_replace("\n", "<br>", $str);
+            return $str_detail;
+        }
+        else{
+            $items = [
+                new NewsItem([
+                    'title' => '查询结果',
+                    'description' => $str,
+                    'url' => 'http://weix.hengdianworld.com/jianpiao/detail?tel=' . $tel,
+                ]),
+
+            ];
+            $news = new News($items);
+            return $news;
+        }
+        /*-------------------输出给html页面结束-----------------------*/
+
+
+      /*
         $str_detail =str_replace("\n","<br>",$str);
         $items = [
 
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
-                'url' => 'http://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
+                'url' => 'http://weix.hengdianworld.com/jianpiao/detail?str='.$str_detail,
             ]),
 
         ];
         $news = new News($items);
 
-        return $str;
+        return $str;*/
     }
 
 
@@ -187,7 +208,7 @@ class JianPiaoController extends Controller
                 new NewsItem([
                     'title' => '查询结果',
                     'description' => $str,
-                    'url' => 'http://weix.hengdiaworld.com/jianpiao/detail?tel=' . $tel,
+                    'url' => 'http://weix.hengdianworld.com/jianpiao/detail?tel=' . $tel,
                 ]),
 
             ];
