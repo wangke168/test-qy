@@ -33,7 +33,7 @@ class JianPiaoController extends Controller
 
             switch ($message['MsgType']) {
                 case 'text':
-                    $news=$this->Check_ticket($message['Content']);
+                    $news=$this->Check_Ticket($message['Content']);
                     return $news;
                     break;
                 default:
@@ -48,14 +48,14 @@ class JianPiaoController extends Controller
     }
 
 
-    private function Check_ticket($tel)
+    private function Check_Ticket($tel)
     {
-        if ($this->Check_ticket_new($tel))
+        if ($this->Check_Tiket_Old($tel))
         {
-            $str= $this->Check_ticket_new($tel);
-        }
-        elseif($this->Check_Tiket_Old($tel)){
             $str= $this->Check_Tiket_Old($tel);
+        }
+        elseif($this->Check_Ticket_New($tel)){
+            $str= $this->Check_Ticket_New($tel);
         }
         else{
             $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
