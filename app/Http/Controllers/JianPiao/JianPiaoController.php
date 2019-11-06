@@ -135,6 +135,7 @@ class JianPiaoController extends Controller
             return $str_detail;
         }
         else{
+            $tel=$tel*13;
             $items = [
                 new NewsItem([
                     'title' => '查询结果',
