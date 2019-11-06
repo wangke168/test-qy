@@ -130,7 +130,14 @@ class JianPiaoController extends Controller
             }
             $str=$str.$this->Check_Ticket_Old($tel,$type,$i);
         } else {
+            if($this->Check_Ticket_Old($tel,$type,0))
+            {
+                $str= "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
+                $str=$str.$this->Check_Ticket_Old($tel,$type,0);
+            }
+            else {
             $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
+            }
         }
 //        return $str;
         /*-------------------输出给html页面开始-----------------------*/
