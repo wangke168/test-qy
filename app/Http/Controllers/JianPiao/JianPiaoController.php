@@ -106,7 +106,7 @@ class JianPiaoController extends Controller
         $ticketcount = count($data['ticketorder']);
         $i = 0;//        return $data['ticketorder'][0]['name'];
         if ($ticketcount <> 0) {
-            $str = "您好，该客人的预订信息如下\n注意，若是联票或活动门票仍然需要身份证检票\n";
+            $str = "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
             for ($j = 0; $j < $ticketcount; $j++) {
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
@@ -167,7 +167,7 @@ class JianPiaoController extends Controller
         $i = 0;
 
         if ($ticketcount <> 0) {
-            $str = "您好，该客人的预订信息如下\n注意，若是联票或活动门票仍然需要身份证检票\n";
+            $str = "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
             for ($j = 0; $j < $ticketcount; $j++) {
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
