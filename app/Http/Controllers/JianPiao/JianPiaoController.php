@@ -111,7 +111,7 @@ class JianPiaoController extends Controller
         ];
         $news = new News($items);
 
-        return $news;
+        return $str;
     }
 
 
@@ -159,7 +159,7 @@ class JianPiaoController extends Controller
         ];
         $news = new News($items);
 
-        return $news;
+        return $str;
     }
 
     public function detail(Request $request)
