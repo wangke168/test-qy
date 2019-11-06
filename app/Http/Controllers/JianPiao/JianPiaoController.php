@@ -139,7 +139,7 @@ class JianPiaoController extends Controller
             return $str_detail;
         }
         else{
-            $tel=$tel*13;
+            $tel=($tel*13)+9;
             $items = [
                 new NewsItem([
                     'title' => '查询结果',
@@ -236,7 +236,7 @@ class JianPiaoController extends Controller
     public function detail(Request $request)
     {
         $tel=$request->input("tel");
-        $tel=$tel/13;
+        $tel=($tel-9)/13;
         $info=$this->Check_Ticket_New($tel,"2","0");
         return view('orderdetail', compact('info'));
     }
