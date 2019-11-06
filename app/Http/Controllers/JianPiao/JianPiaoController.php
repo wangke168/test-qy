@@ -126,9 +126,9 @@ class JianPiaoController extends Controller
             }
             $str=$str.$this->Check_Ticket_Old($tel,$type,$i);
         } else {
-            return null;
+            $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
         }
-        return $str;
+//        return $str;
         /*-------------------输出给html页面开始-----------------------*/
         if ($type==2){
             $str_detail = str_replace("\n", "<br>", $str);
