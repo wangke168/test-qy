@@ -59,12 +59,12 @@ class JianPiaoController extends Controller
     {
         switch ($type){
             case "1":
-                if ($this->Check_Tiket_Old($tel,$type))
+                if ($this->Check_Tiket_New($tel,$type))
                 {
-                    $str= $this->Check_Tiket_Old($tel,$type);
-                }
-                elseif($this->Check_Ticket_New($tel,$type)){
                     $str= $this->Check_Ticket_New($tel,$type);
+                }
+                if($this->Check_Ticket_Old($tel,$type)){
+                    $str= $str.$this->Check_Ticket_Old($tel,$type);
                 }
                 else{
                     $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
