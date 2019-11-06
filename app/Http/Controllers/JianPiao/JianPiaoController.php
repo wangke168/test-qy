@@ -33,7 +33,7 @@ class JianPiaoController extends Controller
 
             switch ($message['MsgType']) {
                 case 'text':
-                    $news=$this->Check_Ticket($message['Content']);
+                    $news=$this->Check_Ticket($message['Content'],"1");
                     return $news;
                     break;
                 default:
@@ -48,9 +48,37 @@ class JianPiaoController extends Controller
     }
 
 
-    private function Check_Ticket($tel)
+    /**
+     * 检票查询
+     * @param $tel
+     * @param $type 1、公众号直接推送；2、详情页
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function Check_Ticket($tel,$type)
     {
-        if ($this->Check_Tiket_Old($tel))
+        switch ($type){
+            case "1":
+                if ($this->Check_Tiket_Old($tel,$type))
+                {
+                    $str= $this->Check_Tiket_Old($tel,$type);
+                }
+                elseif($this->Check_Ticket_New($tel,$type)){
+                    $str= $this->Check_Ticket_New($tel,$type);
+                }
+                else{
+                    $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
+                }
+            case "2":
+                if ($this->Check_Tiket_Old($tel,$type))
+                {
+                    $str= $this->Check_Tiket_Old($tel,$type);
+                }
+                elseif($this->Check_Ticket_New($tel,$type)){
+                    $str= $this->Check_Ticket_New($tel,$type);
+                }
+        }
+    /*    if ($this->Check_Tiket_Old($tel))
         {
             $str= $this->Check_Tiket_Old($tel);
         }
@@ -59,7 +87,7 @@ class JianPiaoController extends Controller
         }
         else{
             $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
-        }
+        }*/
         return $str;
     }
 
@@ -69,7 +97,7 @@ class JianPiaoController extends Controller
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function Check_Ticket_New($tel)
+    private function Check_Ticket_New($tel,$type)
     {
         $url = env('CHECK_ORDER_URL_NEW', 'url');
         $url = $url ."WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";//        $url="http://192.168.100.206:8089/Order/api/Order/WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";
@@ -121,7 +149,7 @@ class JianPiaoController extends Controller
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function Check_Tiket_Old($tel)
+    private function Check_Tiket_Old($tel,$type)
     {
         $url = env('CHECK_ORDER_URL_OLD', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
@@ -145,30 +173,53 @@ class JianPiaoController extends Controller
                 $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] ;
                 $str = $str . "\n订单状态:" . $data['ticketorder'][$j]['flag'] . "\n";
             }
+
         } else {
-            $str = null;
+            return null;
         }
-        if ($str) {
+        /*-------------------输出给html页面开始-----------------------*/
+        if ($type==2){
             $str_detail = str_replace("\n", "<br>", $str);
+            return $str_detail;
+        }
+        else{
             $items = [
                 new NewsItem([
                     'title' => '查询结果',
                     'description' => $str,
-                    'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str=' . $str_detail,
+                    'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?tel=' . $tel,
                 ]),
 
             ];
             $news = new News($items);
             return $news;
         }
-        else{
-            return $str;
-        }
+        /*-------------------输出给html页面结束-----------------------*/
+/*        if ($str) {
+            if ($type==2){
+                $str_detail = str_replace("\n", "<br>", $str);
+                return $str_detail;
+            }
+            else{
+                $items = [
+                    new NewsItem([
+                        'title' => '查询结果',
+                        'description' => $str,
+                        'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?tel=' . $tel,
+                    ]),
+
+                ];
+                $news = new News($items);
+                return $news;
+            }
+        }*/
+
     }
 
     public function detail(Request $request)
     {
-        $str=$request->input("str");
-        return $str;
+        $tel=$request->input("tel");
+
+        echo($this->Check_Ticket($tel,"2"));
     }
 }
