@@ -33,7 +33,7 @@ class JianPiaoController extends Controller
 
             switch ($message['MsgType']) {
                 case 'text':
-                    $news=$this->Check_Tiket_Old($message['Content']);
+                    $news=$this->Check_ticket($message['Content']);
                     return $news;
                     break;
                 default:
