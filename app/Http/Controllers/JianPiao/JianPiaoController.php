@@ -148,18 +148,22 @@ class JianPiaoController extends Controller
         } else {
             $str = null;
         }
-        $str_detail =str_replace("\n","<br>",$str);
-        $items = [
-            new NewsItem([
-                'title' => '查询结果',
-                'description' => $str,
-                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
-            ]),
+        if ($str) {
+            $str_detail = str_replace("\n", "<br>", $str);
+            $items = [
+                new NewsItem([
+                    'title' => '查询结果',
+                    'description' => $str,
+                    'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str=' . $str_detail,
+                ]),
 
-        ];
-        $news = new News($items);
-
-        return $str;
+            ];
+            $news = new News($items);
+            return $news;
+        }
+        else{
+            return $str;
+        }
     }
 
     public function detail(Request $request)
