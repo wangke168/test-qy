@@ -33,7 +33,7 @@ class JianPiaoController extends Controller
 
             switch ($message['MsgType']) {
                 case 'text':
-                    $news=$this->Check_Ticket($message['Content'],"1");
+                    $news=$this->Check_Ticket_New($message['Content'],"1","0");
                     return $news;
                     break;
                 default:
@@ -44,7 +44,7 @@ class JianPiaoController extends Controller
         $response = $this->weObj->server->serve();
         return $response;
 
-//        echo($this->Check_ticket("15074704357"));
+//        echo($this->Check_Ticket_New("13685255777","1","0"));
     }
 
 
@@ -59,20 +59,20 @@ class JianPiaoController extends Controller
     {
         switch ($type){
             case "1":
-                if ($this->Check_Tiket_New($tel,$type))
+           /*     if ($this->Check_Ticket_New($tel,$type))
                 {
                     $str= $this->Check_Ticket_New($tel,$type);
-                }
-                if($this->Check_Ticket_Old($tel,$type)){
-                    $str= $str.$this->Check_Ticket_Old($tel,$type);
-                }
-                else{
+                }*/
+           /*     elseif($this->Check_Ticket_Old($tel,$type)){
+                    $str= $this->Check_Ticket_Old($tel,$type);
+                }*/
+//                else{
                     $str = "该手机号下无门票订单,若需进一步确认信息，请联系客服。";
-                }
+//                }
             case "2":
-                if ($this->Check_Tiket_Old($tel,$type))
+                if ($this->Check_Ticket_Old($tel,$type))
                 {
-                    $str= $this->Check_Tiket_Old($tel,$type);
+                    $str= $this->Check_Ticket_Old($tel,$type);
                 }
                 elseif($this->Check_Ticket_New($tel,$type)){
                     $str= $this->Check_Ticket_New($tel,$type);
@@ -97,14 +97,14 @@ class JianPiaoController extends Controller
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function Check_Ticket_New($tel,$type)
+    private function Check_Ticket_New($tel,$type,$k=0)
     {
         $url = env('CHECK_ORDER_URL_NEW', 'url');
         $url = $url ."WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";//        $url="http://192.168.100.206:8089/Order/api/Order/WXOrderQuery?phone=".$tel."&name=Anonymous&tdsourcetag=s_pctim_aiomsg";
         $json = $this->client->request('GET', $url)->getBody();
         $data = json_decode($json, true);
         $ticketcount = count($data['ticketorder']);
-        $i = 0;//        return $data['ticketorder'][0]['name'];
+        $i = $k;//        return $data['ticketorder'][0]['name'];
         if ($ticketcount <> 0) {
             $str = "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
             for ($j = 0; $j < $ticketcount; $j++) {
@@ -124,9 +124,11 @@ class JianPiaoController extends Controller
                     $str = $str . "\n订单识别码:" . $data['ticketorder'][$j]['code'] . "\n";
                 }
             }
+            $str=$str.$this->Check_Ticket_Old($tel,$type,$i);
         } else {
             return null;
         }
+        return $str;
         /*-------------------输出给html页面开始-----------------------*/
         if ($type==2){
             $str_detail = str_replace("\n", "<br>", $str);
@@ -155,7 +157,7 @@ class JianPiaoController extends Controller
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function Check_Tiket_Old($tel,$type)
+    private function Check_Ticket_Old($tel,$type,$k=0)
     {
         $url = env('CHECK_ORDER_URL_OLD', 'url');
         $url = $url ."searchorder_json.aspx?name=Anonymous&phone=". $tel;
@@ -164,7 +166,7 @@ class JianPiaoController extends Controller
 //        $data =
         $ticketcount = count($data['ticketorder']);
 
-        $i = 0;
+        $i = $k;
 
         if ($ticketcount <> 0) {
             $str = "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
@@ -183,8 +185,11 @@ class JianPiaoController extends Controller
         } else {
             return null;
         }
+
+        return $str;
+
         /*-------------------输出给html页面开始-----------------------*/
-        if ($type==2){
+/*        if ($type==2){
             $str_detail =str_replace("\n", "<br>", $str);
             return $str_detail;
         }
@@ -199,7 +204,7 @@ class JianPiaoController extends Controller
             ];
             $news = new News($items);
             return $news;
-        }
+        }*/
         /*-------------------输出给html页面结束-----------------------*/
 /*        if ($str) {
             if ($type==2){
@@ -226,8 +231,8 @@ class JianPiaoController extends Controller
     {
         $tel=$request->input("tel");
 
-        $info=$this->Check_Ticket($tel,"2");
+        $info=$this->Check_Ticket_New($tel,"1","0");
         return view('orderdetail', compact('info'));
-
     }
+
 }
