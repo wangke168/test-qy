@@ -99,13 +99,13 @@ class JianPiaoController extends Controller
         } else {
             $str = null;
         }
-        $str =str_replace("\n","<br>",$str);
+        $str_detail =str_replace("\n","<br>",$str);
         $items = [
 
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
-                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str,
+                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
             ]),
 
         ];
@@ -148,12 +148,12 @@ class JianPiaoController extends Controller
         } else {
             $str = null;
         }
-        $str =str_replace("\n","<br>",$str);
+        $str_detail =str_replace("\n","<br>",$str);
         $items = [
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
-                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str,
+                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
             ]),
 
         ];
