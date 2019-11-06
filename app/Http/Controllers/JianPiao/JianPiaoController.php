@@ -241,6 +241,8 @@ class JianPiaoController extends Controller
     {
         $tel=$request->input("tel");
 
-        echo($this->Check_Ticket($tel,"2"));
+        $info=$this->Check_Ticket($tel,"2");
+        return view('orderdetail', compact('info'));
+
     }
 }
