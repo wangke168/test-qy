@@ -26,7 +26,7 @@
         }
 
         .flex-center {
-            align-items: center;
+            align-items: start;
             display: flex;
             justify-content: center;
         }
@@ -65,7 +65,7 @@
     </style>
 </head>
 <body>
-<div class="position-ref full-height">
+<div class="flex-center position-ref full-height">
 
     <div class="content">
             {!! $info !!}
