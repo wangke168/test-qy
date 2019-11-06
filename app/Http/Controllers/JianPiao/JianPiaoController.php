@@ -108,6 +108,10 @@ class JianPiaoController extends Controller
         if ($ticketcount <> 0) {
             $str = "您好，该客人的预订信息如下\n注意，若不显示订单识别码即需要身份证检票\n";
             for ($j = 0; $j < $ticketcount; $j++) {
+                if ($data['ticketorder'][$j]['flag']=='未付款')
+                {
+                    continue;
+                }
                 $i = $i + 1;
                 $str = $str . "\n订单" . $i;
                 $str = $str . "\n姓名：" . $data['ticketorder'][$j]['name'];
