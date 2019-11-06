@@ -133,7 +133,7 @@ class JianPiaoController extends Controller
             new NewsItem([
                 'title' => '查询结果',
                 'description' => $str,
-                'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
+                'url' => 'http://weix.hengdiaworld.com/jianpiao/detail?str='.$str_detail,
             ]),
 
         ];
@@ -187,7 +187,7 @@ class JianPiaoController extends Controller
                 new NewsItem([
                     'title' => '查询结果',
                     'description' => $str,
-                    'url' => 'https://weix.hengdiaworld.com/jianpiao/detail?tel=' . $tel,
+                    'url' => 'http://weix.hengdiaworld.com/jianpiao/detail?tel=' . $tel,
                 ]),
 
             ];
