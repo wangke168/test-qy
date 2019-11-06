@@ -200,7 +200,7 @@ class JianPiaoController extends Controller
         }
         /*-------------------输出给html页面开始-----------------------*/
         if ($type==2){
-            $str_detail = str_replace("\n", "<br>", $str);
+            $str_detail ="<span style=\"font-size:18px\">". str_replace("\n", "<br>", $str)."</span>";
             return $str_detail;
         }
         else{
